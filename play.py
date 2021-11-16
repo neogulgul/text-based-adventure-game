@@ -1,3 +1,10 @@
 from main import *
 
-main()
+def play():
+    clear_screen()
+    title_screen()
+    character_creation()
+
+play()
+
+combat()
