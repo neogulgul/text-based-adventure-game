@@ -40,18 +40,18 @@ def character_creation():
         player_name = input("What is your name? -> ")
         if player_name.isalpha():
             while True:
-                confirmation = input(f"Are you sure you want to be known as {player_name}? [Y/N] -> ").upper()
-                if confirmation in ["Y", "N"]:
+                confirmation = input(f"Are you sure you want to be known as {player_name}? [Y/N] -> ").lower()
+                if confirmation in ["y", "n"]:
                     break
 
                 else:
                     print("Invalid input. Y for Yes or N for No.")
                     continue
 
-            if confirmation == "Y":
+            if confirmation == "y":
                 break
 
-            elif confirmation == "N":
+            elif confirmation == "n":
                 continue
 
         else:
@@ -85,31 +85,65 @@ def character_creation():
 def combat():
     battle = True
 
+    player_health = player.get_health()
+    player_attack = player.get_attack()
+
     enemy = random.choice(enemy_list)
     enemy_health = enemy.get_health()
+    enemy_attack = enemy.get_attack()
 
     print(f"{enemy.name} HP: {enemy_health}")
 
     while battle:
-        action = input("Choose action [Attack/Defend/Rest] -> ").lower()
-        if action == "attack":
+        player_action = input("Choose action [Attack/Defend/Rest] -> ").lower()
+        enemy_action = random.choice(["attack"]) #"attack", "attack", "defend"])
+
+        if player_action == "attack":
             hit = random.randint(1, 5)
             if hit == 1:
                 print("You missed.")
+            
             else:
-                enemy_health -= player.get_attack()
-                if enemy_health > 0:
-                    print(f"{enemy.name} took {player.get_attack()} damage. HP: {enemy_health}")
+                if enemy_action == "defend":
+                    pass
+                
                 else:
-                    print(f"You have slain {enemy.name}.")
-                    battle = False
+                    enemy_health -= player_attack
+                    if enemy_health > 0:
+                        print(f"{enemy.name} took {player_attack} damage. {enemy.name} HP: {enemy_health}")
+                    
+                    else:
+                        print(f"You have slain {enemy.name}.")
+                        alive = True
+                        battle = False
 
-        elif action == "defend":
-            pass
-
-        elif action == "rest":
+        if enemy_action == "attack":
+            if battle == True:
+                hit = random.randint(1, 5)
+                if hit == 1:
+                    print(f"{enemy.name} missed.")
+                
+                else:
+                    if player_action == "defend":
+                        pass
+                    
+                    else:
+                        player_health -= enemy_attack
+                        if player_health > 0:
+                            print(f"You took {enemy_attack} damage. {player.name} HP: {player_health}")
+                        
+                        else:
+                            print(f"{player.name} has been slain by {enemy.name}. Game Over.")
+                            alive = False
+                            battle = False
+        
+        elif player_action == "defend" and enemy_action == "defend":
             pass
 
         else:
             print("Invalid input.")
             continue
+    
+    player.set_health(player_health)
+
+    return alive
