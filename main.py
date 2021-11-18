@@ -132,3 +132,11 @@ def combat():
     player.set_health(player_health)
 
     return alive
+
+def help():
+    print('''
+This goal of this game is to kill enemies and get as big of a highscore as possible.
+If your HP goes below zero you die and lose all of your progress.
+''')
+
+#jdfbjsdf

@@ -5,6 +5,8 @@ def play():
     character_creation()
     adventure()
 
-play()
+#play()
 
-combat()
+#combat()
+
+help()
