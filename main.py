@@ -65,7 +65,7 @@ def character_creation():
     player = Player(player_name, player_health, player_attack, player_defence)
 
 def adventure():
-    pass#asdasd
+    pass
 
 def combat():
     battle = True
