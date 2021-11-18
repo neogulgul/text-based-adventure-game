@@ -3,10 +3,7 @@ from main import *
 def play():
     title_screen()
     character_creation()
-    adventure()
+    #adventure()
+    combat() # TA BORT
 
-#play()
-
-#combat()
-
-help()
+play()

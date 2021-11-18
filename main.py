@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import time
+from art import *
 from classes import *
 
 def clear_screen():
@@ -15,27 +16,13 @@ def typewriter(message):
 
 def title_screen():
     clear_screen()
-    print(f'''
-__________________________________________________________________________________________________________________
-|                                                                                                                |
-|                     ______   ______     __         __         ______     __  __     ______                     |
-|                    /\  ___\ /\  __ \   /\ \       /\ \       /\  __ \   /\ \/\ \   /\__  _\                    |
-|                    \ \  __\ \ \  __ \  \ \ \____  \ \ \____  \ \ \/\ \  \ \ \_\ \  \/_/\ \/                    |
-|                     \ \_\    \ \_\ \_\  \ \_____\  \ \_____\  \ \_____\  \ \_____\    \ \_\                    |
-|                      \/_/     \/_/\/_/   \/_____/   \/_____/   \/_____/   \/_____/     \/_/                    |
-|                                                                                                                |
-|                                                                                                                |
-|                                                                                                                |
-|                                                                                                                |
-|                                                                                                                |
-|                                                BY NEO AND VIGGO                                                |
-|                                                                                                                |
-|                                                                                                                |
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    ''')
+    print(TITLE)
+    time.sleep(5)
 
 def character_creation():
     global player
+
+    clear_screen()
 
     while True:
         player_name = input("What is your name? -> ")
@@ -65,9 +52,37 @@ def character_creation():
     player = Player(player_name, player_health, player_attack, player_defence)
 
 def adventure():
-    pass
+    clear_screen()
+
+    while True:
+        choice = input('What do you want to go? [Explore/Inventory]    Type "-help" for further information.\n -> ').lower()
+
+        if choice == "explore":
+            choose_door()
+            if choose_door():
+                continue
+
+            else: # THE PLAYER HAS DIED
+                break
+
+        elif choice == "inventory":
+            inventory()
+            continue
+
+        elif choice == "-help":
+            help()
+            continue
+
+        elif choice == "-quit":
+            break
+
+        else:
+            print("Invalid input.")
+            continue
 
 def combat():
+    clear_screen()
+
     battle = True
 
     player_health = player.get_health()
@@ -84,52 +99,60 @@ def combat():
         enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
         if player_action == "attack":
-            hit = random.randint(1, 5)
-            if hit == 1:
-                print("You missed.")
-            
-            else:
-                if enemy_action == "defend":
-                    enemy_health -= player_attack - enemy.defence
-                
-                else:
-                    enemy_health -= player_attack
-                    if enemy_health > 0:
-                        print(f"{enemy.name} took {player_attack} damage. {enemy.name} HP: {enemy_health}")
-                    
-                    else:
-                        print(f"You have slain {enemy.name}.")
-                        alive = True
-                        battle = False
-
-        if enemy_action == "attack":
             if battle == True:
                 hit = random.randint(1, 5)
                 if hit == 1:
-                    print(f"{enemy.name} missed.")
+                    print(f"You missed.")
                 
                 else:
-                    if player_action == "defend":
+                    if enemy_action == "defend":
                         defend = random.randint(1, 2)
                         if defend == 1:
-                            print(f"You failed in defending against the attack and took {enemy.attack} damage.")
-                            player_health -= enemy_attack
+                            enemy_health -= player_attack
+                            print(f"{enemy.name} failed in defending against your attack and took {player.attack} damage. {enemy.name} HP: {enemy_health}")
 
                         else:
-                            print(f"You succesfully defended against the attack.")
-                            player_health -= enemy_attack - player.defence
+                            enemy_health -= player_attack - enemy.defence
+                            print(f"{enemy.name} succesfully defended against the attack. {enemy.name} HP: {enemy_health}")
                     
                     else:
-                        player_health -= enemy_attack
-                        print(f"You took {enemy_attack} damage. {player.name} HP: {player_health}")
+                        enemy_health -= player_attack
+                        print(f"{enemy.name} took {player_attack} damage. {enemy.name} HP: {enemy_health}")
                     
-                    if player_health < 0:
-                        print(f"{player.name} has been slain by {enemy.name}. Game Over.")
-                        alive = False
-                        battle = False
-        
-        elif player_action == "defend" and enemy_action == "defend":
-            pass
+            if enemy_health <= 0:
+                print(f"{enemy.name} has been slain.")
+                alive = True
+                battle = False
+
+        elif player_action == "defend":
+            if enemy_action == "attack":
+                if battle == True:
+                    hit = random.randint(1, 5)
+                    if hit == 1:
+                        print(f"{enemy.name} missed.")
+                    
+                    else:
+                        if player_action == "defend":
+                            defend = random.randint(1, 2)
+                            if defend == 1:
+                                player_health -= enemy_attack
+                                print(f"You failed in defending against the attack and took {enemy.attack} damage. {player.name} HP: {player_health}")
+
+                            else:
+                                player_health -= enemy_attack - player.defence
+                                print(f"You succesfully defended against the attack. {player.name} HP: {player_health}")
+                        
+                        else:
+                            player_health -= enemy_attack
+                            print(f"You took {enemy_attack} damage. {player.name} HP: {player_health}")
+                        
+                if player_health <= 0:
+                    print(f"{player.name} has been slain by {enemy.name}. Game Over.")
+                    alive = False
+                    battle = False
+            
+            elif player_action == "defend" and enemy_action == "defend":
+                pass
 
         else:
             print("Invalid input.")
@@ -140,7 +163,15 @@ def combat():
     return alive
 
 def help():
+    clear_screen()
+
     print('''
-This goal of this game is to kill enemies and get as big of a highscore as possible.
+The goal of this game is to kill enemies and get as high of a highscore as possible.
 If your HP goes below zero you die and lose all of your progress.
+Whenever you are faced with an input you should type one of the actions inside these brackets [].
+
+If you want to quit the game type "-quit" (this only works in the pick-a-door room).
 ''')
+
+def inventory():
+    pass
