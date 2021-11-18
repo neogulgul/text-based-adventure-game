@@ -81,7 +81,7 @@ def combat():
 
     while battle:
         player_action = input("Choose action [Attack/Defend/Rest] -> ").lower()
-        enemy_action = random.choice(["attack"]) #"attack", "attack", "defend"])
+        enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
         if player_action == "attack":
             hit = random.randint(1, 5)
@@ -90,7 +90,7 @@ def combat():
             
             else:
                 if enemy_action == "defend":
-                    pass
+                    enemy_health -= player_attack - enemy.defence
                 
                 else:
                     enemy_health -= player_attack
@@ -110,17 +110,23 @@ def combat():
                 
                 else:
                     if player_action == "defend":
-                        pass
+                        defend = random.randint(1, 2)
+                        if defend == 1:
+                            print(f"You failed in defending against the attack and took {enemy.attack} damage.")
+                            player_health -= enemy_attack
+
+                        else:
+                            print(f"You succesfully defended against the attack.")
+                            player_health -= enemy_attack - player.defence
                     
                     else:
                         player_health -= enemy_attack
-                        if player_health > 0:
-                            print(f"You took {enemy_attack} damage. {player.name} HP: {player_health}")
-                        
-                        else:
-                            print(f"{player.name} has been slain by {enemy.name}. Game Over.")
-                            alive = False
-                            battle = False
+                        print(f"You took {enemy_attack} damage. {player.name} HP: {player_health}")
+                    
+                    if player_health < 0:
+                        print(f"{player.name} has been slain by {enemy.name}. Game Over.")
+                        alive = False
+                        battle = False
         
         elif player_action == "defend" and enemy_action == "defend":
             pass
@@ -138,5 +144,3 @@ def help():
 This goal of this game is to kill enemies and get as big of a highscore as possible.
 If your HP goes below zero you die and lose all of your progress.
 ''')
-
-#jdfbjsdf
