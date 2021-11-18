@@ -28,17 +28,6 @@ class Enemy:
 
     def get_health(self):
         return self.health
-    def get_attack(self):
-        return self.attack
-    def get_defence(self):
-        return self.defence
-
-    def set_health(self, new_health):
-        self.health = new_health
-    def set_attack(self, new_attack):
-        self.attack = new_attack
-    def set_defence(self, new_defence):
-        self.defence = new_defence
 
 goblin = Enemy("Goblin", 5, 1, 0)
 

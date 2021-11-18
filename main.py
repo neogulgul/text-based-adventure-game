@@ -14,6 +14,7 @@ def typewriter(message):
         sys.stdout.flush()
 
 def title_screen():
+    clear_screen()
     print(f'''
 __________________________________________________________________________________________________________________
 |                                                                                                                |
@@ -63,34 +64,18 @@ def character_creation():
 
     player = Player(player_name, player_health, player_attack, player_defence)
 
-# def adventure():
-#     while True:
-#         action = input("What do you want to do? [Explore/Inventory] -> ").lower()
-#         if action == "explore":
-#             explore()
-# 
-#         elif action == "inventory":
-#             inventory()
-# 
-#         else:
-#             print("Invalid input.")
-#             continue
-# 
-# def explore():
-#     pass
-# 
-# def inventory():
-#     pass
+def adventure():
+    pass#asdasd
 
 def combat():
     battle = True
 
     player_health = player.get_health()
-    player_attack = player.get_attack()
+    player_attack = player.attack
 
     enemy = random.choice(enemy_list)
     enemy_health = enemy.get_health()
-    enemy_attack = enemy.get_attack()
+    enemy_attack = enemy.attack
 
     print(f"{enemy.name} HP: {enemy_health}")
 
