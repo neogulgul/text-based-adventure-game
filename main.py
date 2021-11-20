@@ -6,6 +6,8 @@ from classes import *
 from art import *
 from text import *
 
+inventory_items = []
+
 def clear_screen():
     os.system('cls')
 
@@ -51,12 +53,16 @@ def character_creation():
         else:
             print("Invalid input. Use only letters. Can not be more than 20 characters long.")
     
-    player_health = 10
-    player_attack = 2
+    player_health = 15
+    player_attack = 1
     player_defence = 0
     player_speed = 10
+    player_weapon = None
+    player_weapon_stat = "0 0"
+    player_armour = None
+    player_armour_stat = "0 0"
 
-    player = Player(player_name, player_health, player_attack, player_defence, player_speed)
+    player = Player(player_name, player_health, player_attack, player_defence, player_speed, player_weapon, player_weapon_stat,  player_armour, player_armour_stat)
 
 def adventure():
     clear_screen()
@@ -65,7 +71,7 @@ def adventure():
         choice = input('What do you want to do? [Explore/Inventory] (Type "-help" for further information) -> ').lower()
 
         if choice == "explore":
-            if choose_door():
+            if choose_path():
                 continue
 
             else: # THE PLAYER HAS DIED
@@ -100,27 +106,27 @@ def check_inventory():
     else:
         item_slot_1, item_slot_2, item_slot_3 = None, None, None
 
-    print(f'''----- {player.name}'s Stats -----
-    Name: {player.name}
-    HP: {player.health}/{player.max_health}
-    ATK: {player.attack}
-    DEF: {player.defence}
-    SPD: {player.speed}
-    Headgear: {None}
-    Chestpiece: {None}
-    Leggings: {None}
-    Item slot 1: {item_slot_1}
-    Item slot 2: {item_slot_2}
-    Item slot 3: {item_slot_3}
-    ''')
+    print(f'''{player.name}'s Stats
+Name: {player.name}
+HP: {player.health}/{player.max_health}
+ATK: {player.attack + int(player.weapon_stat.split()[0])} ({int(player.weapon_stat.split()[0])} from {player.weapon})
+DEF: {player.defence + int(player.armour_stat.split()[0])} ({int(player.armour_stat.split()[0])} from {player.armour})
+SPD: {player.speed + int(player.weapon_stat.split()[1]) + int(player.armour_stat.split()[1])} ({int(player.weapon_stat.split()[1]) + int(player.armour_stat.split()[1])} from {player.weapon} and {player.armour})
+Weapon: {player.weapon}
+Armour: {player.armour}
+Item slot 1: {item_slot_1}
+Item slot 2: {item_slot_2}
+Item slot 3: {item_slot_3}''')
 
-def choose_door():
+# {player.speed + int(player.weapon_stat[1]) + int(player.armour_stat[1])} (+{int(player.weapon_stat[1]) + int(player.armour_stat[1])} from {player.weapon} and {player.armour})
+
+def choose_path():
     while True:
-        direction = input("What door do you go into? [North/West/East] -> ").lower()
+        direction = input("What path do you take? [North/West/East] -> ").lower()
 
         if direction in ["north", "west", "east"]:
-            print(f"You go through the {direction} door.")
-            random.choice([combat, combat, combat, trap, treasure, bonfire])()
+            print(f"You go {direction}.")
+            random.choice([combat, combat, trap, treasure, treasure, treasure, bonfire])()
             break
 
         else:
@@ -128,6 +134,7 @@ def choose_door():
             continue
     
     if player.health <= 0:
+        print(f"You have died. Game Over.")
         return False
 
     return True
@@ -137,11 +144,21 @@ def combat():
 
     battle = True
 
+    if player.weapon == None:
+        player_weapon_stat = ["0", "0"] # [attack, speed]
+    else:
+        player_weapon_stat = player.weapon_stat.split()
+    if player.armour == None:
+        player_armour_stat = ["0", "0"] # [defence, speed]
+    else:
+        player_armour_stat = player.armour_stat.split()
+
     player_name = player.name
     player_HP = player.health
-    player_ATK = player.attack
-    player_DEF = player.defence
-    player_SPD = player.speed
+    player_max_HP = player.max_health
+    player_ATK = player.attack + int(player_weapon_stat[0])
+    player_DEF = player.defence + int(player_armour_stat[0])
+    player_SPD = player.speed + int(player_weapon_stat[1]) + int(player_armour_stat[1])
 
     enemy = random.choice(list_of_enemies)
     enemy_name = enemy.name
@@ -157,6 +174,10 @@ def combat():
 
         player_action = input("What do you choose to do? [Attack/Defend/Item] -> ").lower()
 
+        if player_action not in ["attack", "defend", "item"]:
+            print("Invalid input.")
+            continue
+
         if player_action == "defend" and player_DEF == 0:
             print("You have 0 defence and therefore can't defend.")
             continue
@@ -167,43 +188,66 @@ def combat():
         else:
             enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
-        if player_action not in ["attack", "defend", "item"]:
-            print("Invalid input.")
-            continue
-
-        elif player_action == "item":
+        if player_action == "item":
             if len(inventory_items) == 0:
                 print("You have no items.")
                 continue
             
             else:
-                use_item()
+                while True:
+                    item_chosen = input(f"What item do you want to use? {see_inventory_items()} -> ").lower()
+                    for item in inventory_items:
+                        if item.name.lower() == item_chosen:
+                            item_chosen = item
+                    
+                    if item_chosen not in inventory_items:
+                        print("Invalid input.")
+                        continue
 
+                    if item_chosen == health_potion:
+                        player_HP += health_potion.use
+                        if player_HP > player_max_HP:
+                            player_HP = player_max_HP
+
+                        print(f"You used up your health potion and gained {health_potion.use} HP. HP: {player_HP}/{player_max_HP}")
+
+                    elif item_chosen == rock:
+                        enemy_HP -= rock.use
+
+                        print(f"You threw your rock at the enemy. {enemy_name} took {rock.use} points of damage.")
+
+                    inventory_items.remove(item_chosen)
+
+                    break
+        
         elif player_action == "defend" and enemy_action == "defend":
             print("You both chose to defend and nothing happened.")
+            continue
+
+        elif player_action == "defend":
+            print("You chose to defend.")
+
+        elif enemy_action == "defend":
+            print(f"{enemy_name} chose to defend.")
 
         if player_SPD > enemy_SPD:
             enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
             if enemy_HP <= 0:
-                print(f"You have slain {enemy_name}.")
                 battle = False
             
             else:
                 player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
                 if player_HP <= 0:
-                    print(f"{player_name} has been slain. Game Over.")
                     battle = False
 
         elif player_SPD < enemy_SPD:
             player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
             if player_HP <= 0:
-                print(f"{player_name} has been slain. Game Over.")
                 battle = False
             
             else:
                 enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
-                    print(f"You have slain {enemy_name}.")
                     battle = False
 
         elif player_SPD == enemy_SPD:
@@ -212,27 +256,29 @@ def combat():
             if who_goes_first == "player":
                 enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
-                    print(f"You have slain {enemy_name}.")
                     battle = False
                 
                 else:
                     player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
                     if player_HP <= 0:
-                        print(f"{player_name} has been slain. Game Over.")
                         battle = False
 
             elif who_goes_first == "enemy":
                 player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
                 if player_HP <= 0:
-                    print(f"{player_name} has been slain. Game Over.")
                     battle = False
                 
                 else:
                     enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
                     if enemy_HP <= 0:
-                        print(f"You have slain {enemy_name}.")
                         battle = False
-    
+
+    if player_HP <= 0:
+        print(f"{player_name} has been slain by {enemy_name}.")
+
+    elif enemy_HP <= 0:
+        print(f"You have slain {enemy_name}.")
+
     player.set_health(player_HP)
 
 def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
@@ -320,8 +366,8 @@ def see_inventory_items():
 def trap():
     trap_message = random.choice(list_trap_messages)
     print(trap_message)
-    dmg = random.randint(1, 3)
-    print(f"You took {dmg} points of damage.")
+    dmg = random.randint(1, 2)
+    print(f"You take {dmg} points of damage.")
     player.health -= dmg
 
 def treasure():
@@ -329,21 +375,21 @@ def treasure():
     loot()
 
 def loot():
-    loot_table = random.choice(["item"]) # ["item", "weapon", "armour"]
+    loot_table = random.choice(["item", "weapon", "armour"])
     if loot_table == "item":
         loot = random.choice(loot_items)
-        print(f"You found a {loot.name}.")
+        print(f"You found a {loot.name}. {loot.description}")
         add_to_items(loot)
 
     elif loot_table == "weapon":
         loot = random.choice(loot_weapons)
-        print(f"You found a {loot.name}.")
-        equip()
+        print(f"You found a {loot.name}. {loot.description}")
+        equip(loot)
 
     elif loot_table == "armour":
         loot = random.choice(loot_armour)
-        print(f"You found a {loot.name}.")
-        equip()
+        print(f"You found {loot.name}. {loot.description}")
+        equip(loot)
 
 def add_to_items(loot):
     if len(inventory_items) >= 3:
@@ -381,8 +427,52 @@ def add_to_items(loot):
         print(f"You put {loot.name} in your pocket.")
         inventory_items.append(loot)
 
-def equip():
-    pass
+def equip(loot):
+    if loot in loot_weapons:
+        if player.weapon == None:
+            print(f"You equipped {loot.name}.")
+            player.weapon = loot.name
+            player.weapon_stat = loot.use
+
+        else:
+            while True:
+                change_or_keep = input(f"Do you want to change from your {player.weapon} to {loot.name}? [Y/N] -> ").lower()
+                if change_or_keep == "y":
+                    print(f"You decide to leave your {player.weapon} behind and switch to {loot.name}.")
+                    player.weapon = loot.name
+                    player.weapon_stat = loot.use
+                    break
+
+                elif change_or_keep == "n":
+                    print(f"You decide to keep your {player.weapon}.")
+                    break
+
+                else:
+                    print("Invalid input.")
+                    continue
+
+    elif loot in loot_armour:
+        if player.armour == None:
+            player.armour = loot.name
+            player.armour_stat = loot.use
+            print(f"You equipped {loot.name}.")
+
+        else:
+            while True:
+                change_or_keep = input(f"Do you want to change from your {player.armour} to {loot.name}? [Y/N] -> ").lower()
+                if change_or_keep == "y":
+                    print(f"You decide to leave your {player.armour} behind and switch to {loot.name}.")
+                    player.armour = loot.name
+                    player.armour_stat = loot.use
+                    break
+
+                elif change_or_keep == "n":
+                    print(f"You decide to keep your {player.armour}.")
+                    break
+
+                else:
+                    print("Invalid input.")
+                    continue
 
 def bonfire():
     while True:
