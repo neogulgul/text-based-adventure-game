@@ -60,15 +60,15 @@ health_potion = Item("Health Potion", "A flask filled with a bright red liquid. 
 rock = Item("Rock", "You can throw it at your foes.", 3)
 loot_items = [health_potion, rock]
 
-# Weapons (weapon = Item(name, description, "attack speed"))
-wooden_club = Item("Wooden Club", "It reeks of troll.", "3 -1")
-iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", "2 0")
-steel_dagger = Item("Steel Dagger", "An assassins best friend.", "1 2")
-elven_bow = Item("Elven Bow", "Smithed by the wise elves.", "2 2")
-orc_mace = Item("Orc Mace", "Orcs have a knack for forging deadly weapons.", "4 -2")
+# Weapons (weapon = Item(name, description, [attack, speed]))
+wooden_club = Item("Wooden Club", "It reeks of troll.", [3, -1])
+iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [2, 0])
+steel_dagger = Item("Steel Dagger", "An assassins best friend.", [1, 2])
+elven_bow = Item("Elven Bow", "Smithed by the wise elves.", [2, 2])
+orc_mace = Item("Orc Mace", "Orcs have a knack for forging deadly weapons.", [4, -2])
 loot_weapons = [wooden_club, iron_sword, steel_dagger, elven_bow, orc_mace]
 
-# Armour (armour = Item(name, description, "defence speed"))
-leather_garments = Item("Leather Garments", "A light set commonly worn by thieves.", "1 0")
-iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", "2 -2")
+# Armour (armour = Item(name, description, [defence, speed]))
+leather_garments = Item("Leather Garments", "A light set commonly worn by thieves.", [1, 0])
+iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [2, -2])
 loot_armour = [leather_garments, iron_armour]

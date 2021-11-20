@@ -58,9 +58,9 @@ def character_creation():
     player_defence = 0
     player_speed = 10
     player_weapon = None
-    player_weapon_stat = "0 0"
+    player_weapon_stat = [0, 0]
     player_armour = None
-    player_armour_stat = "0 0"
+    player_armour_stat = [0, 0]
 
     player = Player(player_name, player_health, player_attack, player_defence, player_speed, player_weapon, player_weapon_stat,  player_armour, player_armour_stat)
 
@@ -109,9 +109,9 @@ def check_inventory():
     print(f'''{player.name}'s Stats
 Name: {player.name}
 HP: {player.health}/{player.max_health}
-ATK: {player.attack + int(player.weapon_stat.split()[0])} ({int(player.weapon_stat.split()[0])} from {player.weapon})
-DEF: {player.defence + int(player.armour_stat.split()[0])} ({int(player.armour_stat.split()[0])} from {player.armour})
-SPD: {player.speed + int(player.weapon_stat.split()[1]) + int(player.armour_stat.split()[1])} ({int(player.weapon_stat.split()[1]) + int(player.armour_stat.split()[1])} from {player.weapon} and {player.armour})
+ATK: {player.attack + player.weapon_stat[0]} ({player.weapon_stat[0]} from {player.weapon})
+DEF: {player.defence + player.armour_stat[0]} ({player.armour_stat[0]} from {player.armour})
+SPD: {player.speed + player.weapon_stat[1] + player.armour_stat[1]} ({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})
 Weapon: {player.weapon}
 Armour: {player.armour}
 Item slot 1: {item_slot_1}
@@ -142,21 +142,12 @@ def combat():
 
     battle = True
 
-    if player.weapon == None:
-        player_weapon_stat = ["0", "0"] # [attack, speed]
-    else:
-        player_weapon_stat = player.weapon_stat.split()
-    if player.armour == None:
-        player_armour_stat = ["0", "0"] # [defence, speed]
-    else:
-        player_armour_stat = player.armour_stat.split()
-
     player_name = player.name
     player_HP = player.health
     player_max_HP = player.max_health
-    player_ATK = player.attack + int(player_weapon_stat[0])
-    player_DEF = player.defence + int(player_armour_stat[0])
-    player_SPD = player.speed + int(player_weapon_stat[1]) + int(player_armour_stat[1])
+    player_ATK = player.attack + player.weapon_stat[0]
+    player_DEF = player.defence + player.armour_stat[0]
+    player_SPD = player.speed + player.weapon_stat[1] + player.armour_stat[1]
 
     enemy = random.choice(list_of_enemies)
     enemy_name = enemy.name
