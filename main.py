@@ -217,6 +217,9 @@ def combat():
                     inventory_items.remove(item_chosen)
 
                     break
+            
+            if enemy_HP <= 0:
+                battle = False
         
         elif player_action == "defend" and enemy_action == "defend":
             print("You both chose to defend and nothing happened.")
@@ -326,10 +329,10 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
                 else:
                     dmg = enemy_ATK - player_DEF
                     if dmg <= 0:
-                        print(f"You successfully defended against the and took 0 points of damage.")
+                        print(f"You successfully defended against the enemy attack and took 0 points of damage.")
                     
                     else:
-                        print(f"You successfully defended against the attack and only took {dmg} points of damage")
+                        print(f"You successfully defended against the enemy attack and only took {dmg} points of damage.")
                         player_HP -= dmg
 
             else:
@@ -338,21 +341,6 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
                 player_HP -= dmg
 
     return player_HP
-
-def use_item():
-    while True:
-        item_chosen = input(f"What item do you want to use? {see_inventory_items()} -> ").lower()
-        for item in inventory_items:
-            if item.name.lower() == item_chosen:
-                print(f"You chose {item.name}.")
-                item_chosen = item
-        
-        if item_chosen not in inventory_items:
-            print("Invalid input.")
-            continue
-
-        item_chosen.use
-        break
 
 def see_inventory_items():
     inventory_items_names = []
