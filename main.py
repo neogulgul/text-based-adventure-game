@@ -118,8 +118,6 @@ Item slot 1: {item_slot_1}
 Item slot 2: {item_slot_2}
 Item slot 3: {item_slot_3}''')
 
-# {player.speed + int(player.weapon_stat[1]) + int(player.armour_stat[1])} (+{int(player.weapon_stat[1]) + int(player.armour_stat[1])} from {player.weapon} and {player.armour})
-
 def choose_path():
     while True:
         direction = input("What path do you take? [North/West/East] -> ").lower()
