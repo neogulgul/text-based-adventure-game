@@ -56,14 +56,15 @@ item = Item(name, description, use)
 '''
 
 # Items (item = Item(name, description, value))
-health_potion = Item("Health Potion", "A flask filled with a bright red liquid. Used to heal your wounds.", 5)
+health_potion = Item("Health Potion", "A flask filled with a bright red liquid. Use it to heal your wounds.", 5)
 rock = Item("Rock", "You can throw it at your foes.", 3)
-loot_items = [health_potion, rock]
+smoke_bomb = Item("Smoke Bomb", "Can get you out of trouble in a pinch.", None)
+loot_items = [health_potion, rock, smoke_bomb]
 
 # Weapons (weapon = Item(name, description, [attack, speed]))
 wooden_club = Item("Wooden Club", "It reeks of troll.", [3, -1])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [2, 0])
-steel_dagger = Item("Steel Dagger", "An assassins best friend.", [1, 2])
+steel_dagger = Item("Steel Dagger", "An assassin's best friend.", [1, 2])
 elven_bow = Item("Elven Bow", "Smithed by the wise elves.", [2, 2])
 orc_mace = Item("Orc Mace", "Orcs have a knack for forging deadly weapons.", [4, -2])
 loot_weapons = [wooden_club, iron_sword, steel_dagger, elven_bow, orc_mace]
