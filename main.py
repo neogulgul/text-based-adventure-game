@@ -173,7 +173,7 @@ def combat():
 
         if enemy_DEF == 0:
             enemy_action = "attack"
-        
+
         else:
             enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
@@ -197,29 +197,32 @@ def combat():
                         player_HP += health_potion.use
                         if player_HP > player_max_HP:
                             player_HP = player_max_HP
-
-                        print(f"You used up your health potion and gained {health_potion.use} HP. HP: {player_HP}/{player_max_HP}")
+                        print(f"You used up your health potion and gained {health_potion.use} HP. {player_name} HP: {player_HP}/{player_max_HP}")
 
                     elif item_chosen == rock:
                         enemy_HP -= rock.use
-
                         print(f"You threw your rock at the enemy. {enemy_name} took {rock.use} points of damage.")
+                        if enemy_HP <= 0:
+                            battle = False
+
+                    elif item_chosen == smoke_bomb:
+                        print("You throw the smoke bomb on the ground and flee from battle.")
+                        battle = False
 
                     inventory_items.remove(item_chosen)
-
                     break
-            
-            if enemy_HP <= 0:
-                battle = False
-        
-        elif player_action == "defend" and enemy_action == "defend":
+
+        if battle == False:
+            break
+
+        if player_action == "defend" and enemy_action == "defend":
             print("You both chose to defend and nothing happened.")
             continue
 
-        elif player_action == "defend":
+        if player_action == "defend":
             print("You chose to defend.")
 
-        elif enemy_action == "defend":
+        if enemy_action == "defend":
             print(f"{enemy_name} chose to defend.")
 
         if player_SPD > enemy_SPD:
@@ -266,10 +269,10 @@ def combat():
                         battle = False
 
     if player_HP <= 0:
-        print(f"{player_name} has been slain by {enemy_name}.")
+        print(f"{player_name} has been slain by the {enemy_name}.")
 
     elif enemy_HP <= 0:
-        print(f"You have slain {enemy_name}.")
+        print(f"You have slain the {enemy_name}.")
 
     player.set_health(player_HP)
 
@@ -290,7 +293,7 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
                 else:
                     dmg = player_ATK - enemy_DEF
                     if dmg <= 0:
-                        print(f"{enemy_name} successfully defended against the attack and took 0 points of damage.")
+                        print(f"{enemy_name} successfully defended against your attack and took 0 points of damage.")
 
                     else:
                         print(f"{enemy_name} successfully defended against your attack and only took {dmg} points of damage.")
