@@ -15,14 +15,6 @@ class Player:
 
     def set_health(self, new_health):
         self.health = new_health
-    def set_max_health(self, new_max_health):
-        self.max_health = new_max_health
-    def set_attack(self, new_attack):
-        self.attack = new_attack
-    def set_defence(self, new_defence):
-        self.defence = new_defence
-    def set_speed(self, new_speed):
-        self.speed = new_speed
 
 class Enemy:
     def __init__(self, name, HP, ATK, DEF, SPD, EXP):
