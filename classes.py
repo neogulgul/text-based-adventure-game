@@ -1,15 +1,17 @@
 class Player:
-    def __init__(self, name, HP, ATK, DEF, SPD, weapon, weapon_stat, armour, armour_stat):
+    def __init__(self, name, HP, ATK, DEF, SPD):
         self.name = name
         self.health = HP
         self.max_health = HP
         self.attack = ATK
         self.defence = DEF
         self.speed = SPD
-        self.weapon = weapon
-        self.weapon_stat = weapon_stat
-        self.armour = armour
-        self.armour_stat = armour_stat
+        self.level = 1
+        self.experience = 0
+        self.weapon = None
+        self.weapon_stat = [0, 0]
+        self.armour = None
+        self.armour_stat = [0, 0]
 
     def set_health(self, new_health):
         self.health = new_health
@@ -23,12 +25,13 @@ class Player:
         self.speed = new_speed
 
 class Enemy:
-    def __init__(self, name, HP, ATK, DEF, SPD):
+    def __init__(self, name, HP, ATK, DEF, SPD, EXP):
         self.name = name
         self.health = HP
         self.attack = ATK
         self.defence = DEF
         self.speed = SPD
+        self.experience = EXP
 
 class Item:
     def __init__(self, name, description, use):
@@ -39,13 +42,13 @@ class Item:
 '''
 Enemy creation with the use of the Enemy class and defining attributes for each unique enemy.
 
-enemy = Enemy(name, health, attack, defence, speed)
+enemy = Enemy(name, health, attack, defence, speed, experience)
 '''
 
-slime = Enemy("Slime", 3, 1, 0, 10)
-goblin = Enemy("Goblin", 6, 1, 0, 8)
-skeleton = Enemy("Skeleton", 5, 1, 1, 8)
-gnome = Enemy("Gnome", 4, 1, 0, 12)
+slime = Enemy("Slime", 3, 1, 0, 10, 55)
+goblin = Enemy("Goblin", 6, 1, 0, 8, 75)
+skeleton = Enemy("Skeleton", 8, 1, 1, 8, 65)
+gnome = Enemy("Gnome", 4, 1, 0, 12, 85)
 
 list_of_enemies = [slime, goblin, skeleton, gnome]
 
@@ -73,3 +76,5 @@ loot_weapons = [wooden_club, iron_sword, steel_dagger, elven_bow, orc_mace]
 leather_garments = Item("Leather Garments", "A light set commonly worn by thieves.", [1, 0])
 iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [2, -2])
 loot_armour = [leather_garments, iron_armour]
+
+inventory_items = []

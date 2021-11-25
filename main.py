@@ -6,8 +6,6 @@ from classes import *
 from art import *
 from text import *
 
-inventory_items = []
-
 def clear_screen():
     os.system('cls')
 
@@ -57,12 +55,8 @@ def character_creation():
     player_attack = 1
     player_defence = 0
     player_speed = 10
-    player_weapon = None
-    player_weapon_stat = [0, 0]
-    player_armour = None
-    player_armour_stat = [0, 0]
 
-    player = Player(player_name, player_health, player_attack, player_defence, player_speed, player_weapon, player_weapon_stat,  player_armour, player_armour_stat)
+    player = Player(player_name, player_health, player_attack, player_defence, player_speed)
 
 def adventure():
     clear_screen()
@@ -94,6 +88,9 @@ def adventure():
 
 def check_inventory():
     clear_screen()
+
+    level_up_exp = 100 + 10 * player.level
+    
     if len(inventory_items) == 3:
         item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
 
@@ -112,6 +109,8 @@ HP: {player.health}/{player.max_health}
 ATK: {player.attack + player.weapon_stat[0]} ({player.weapon_stat[0]} from {player.weapon})
 DEF: {player.defence + player.armour_stat[0]} ({player.armour_stat[0]} from {player.armour})
 SPD: {player.speed + player.weapon_stat[1] + player.armour_stat[1]} ({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})
+Level: {player.level}
+Experience: {player.experience}/{level_up_exp}
 Weapon: {player.weapon}
 Armour: {player.armour}
 Item slot 1: {item_slot_1}
@@ -124,7 +123,7 @@ def choose_path():
 
         if direction in ["north", "west", "east"]:
             print(f"You go {direction}.")
-            random.choice([combat, combat, trap, treasure, treasure, treasure, bonfire])()
+            random.choice([combat, combat, trap, treasure, treasure, bonfire])()
             break
 
         else:
@@ -144,7 +143,6 @@ def combat():
 
     player_name = player.name
     player_HP = player.health
-    player_max_HP = player.max_health
     player_ATK = player.attack + player.weapon_stat[0]
     player_DEF = player.defence + player.armour_stat[0]
     player_SPD = player.speed + player.weapon_stat[1] + player.armour_stat[1]
@@ -159,9 +157,10 @@ def combat():
     print(f"You have encountered a {enemy_name} with {enemy_HP} HP.")
 
     while battle:
-        print(f"{player_name} HP: {player_HP}\n{enemy_name} HP: {enemy_HP}")
+        print(f"{player_name} HP: {player_HP}/{player.max_health}\n{enemy_name} HP: {enemy_HP}")
 
         player_action = input("What do you choose to do? [Attack/Defend/Item] -> ").lower()
+        clear_screen()
 
         if player_action not in ["attack", "defend", "item"]:
             print("Invalid input.")
@@ -195,9 +194,9 @@ def combat():
 
                     if item_chosen == health_potion:
                         player_HP += health_potion.use
-                        if player_HP > player_max_HP:
-                            player_HP = player_max_HP
-                        print(f"You used up your health potion and gained {health_potion.use} HP. {player_name} HP: {player_HP}/{player_max_HP}")
+                        if player_HP > player.max_health:
+                            player_HP = player.max_health
+                        print(f"You used up your health potion and gained {health_potion.use} HP. {player_name} HP: {player_HP}/{player.max_health}")
 
                     elif item_chosen == rock:
                         enemy_HP -= rock.use
@@ -273,6 +272,15 @@ def combat():
 
     elif enemy_HP <= 0:
         print(f"You have slain the {enemy_name}.")
+        print(f"You gained {enemy.experience} experience points.")
+        player.experience += enemy.experience
+        level_up_exp = 100 + 10 * player.level
+        if player.experience > level_up_exp:
+            player.experience -= level_up_exp
+            player.level += 1
+            print(f"You leveled up! You are now level {player.level}.")
+            level_up()
+            player_HP = player.max_health
 
     player.set_health(player_HP)
 
@@ -342,6 +350,40 @@ def see_inventory_items():
         inventory_items_names.append(item.name)
 
     return inventory_items_names
+
+def level_up():
+    print("You get to choose one attribute of yours to upgrade.")
+    print(f'''
+    HP: {player.health}/{player.max_health}
+    ATK: {player.attack}
+    DEF: {player.defence}
+    SPD: {player.speed}
+    ''')
+    attributes_list = ["HP", "ATK", "DEF", "SPD"]
+    while True:
+        attribute = input(f"Which attribute do you want to increase? {attributes_list} -> ").upper()
+        if attribute not in attributes_list:
+            print("Invalid input.")
+
+        elif attribute == "HP":
+            player.max_health += 5
+            print("Your max HP increased by 5 points.")
+            break
+
+        elif attribute == "ATK":
+            player.attack += 1
+            print("Your ATK increased by 1 point.")
+            break
+
+        elif attribute == "DEF":
+            player.defence += 1
+            print("Your DEF increased by 1 point.")
+            break
+
+        elif attribute == "SPD":
+            player.speed += 1
+            print("Your SPD increased by 1 point.")
+            break
 
 def trap():
     trap_message = random.choice(list_trap_messages)
