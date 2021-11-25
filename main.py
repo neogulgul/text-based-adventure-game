@@ -502,15 +502,16 @@ def bonfire():
     while True:
         rest = input("You find yourself in a room with a bonfire. Do you choose to rest here? [Y/N] -> ").lower()
         if rest == "y":
-            # something should happen here
+            print(f"You current health is {player.health}")
             sleep_hours = int(input("For how many hours do you wanna rest? -> "))
             for hour in range(sleep_hours):
                 if random.randint(1, 4) != 1:
                     player.health += 1
-                    print("You gained HP while resting")
+                    print(f"You recovered to {player.health} HP while resting")
                     if player.health > player.max_health:
                         player.health = player.max_health
                 else:
+                    print(random.choice(list_enemy_messages))
                     combat()
                     break
                 choose_path()
