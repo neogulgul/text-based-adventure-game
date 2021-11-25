@@ -44,6 +44,12 @@ gnome = Enemy("Gnome", 4, 1, 0, 12, 85)
 
 list_of_enemies = [slime, goblin, skeleton, gnome]
 
+evil_spirit = Enemy("Evil Spirit", 8, 5, 4, 10, 100)
+dragon = Enemy("Dragon", 12, 4, 4, 3, 100)
+giant_ogre = Enemy("Giant Ogre", 25, 2, 8, 1, 100)
+
+list_of_bosses = [evil_spirit, dragon, giant_ogre]
+
 '''
 Item creation with the use of the Item class and defining attributes for each unique item.
 

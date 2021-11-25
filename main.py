@@ -146,8 +146,10 @@ def combat():
     player_ATK = player.attack + player.weapon_stat[0]
     player_DEF = player.defence + player.armour_stat[0]
     player_SPD = player.speed + player.weapon_stat[1] + player.armour_stat[1]
-
-    enemy = random.choice(list_of_enemies)
+    if player.level % 5 == 0:
+        enemy = random.choice(list_of_bosses)
+    else:
+        enemy = random.choice(list_of_enemies)
     enemy_name = enemy.name
     enemy_HP = enemy.health
     enemy_ATK = enemy.attack
