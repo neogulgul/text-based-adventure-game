@@ -11,47 +11,53 @@ def clear_screen():
 
 def typing(message):
     for char in message:
-        time.sleep(random.choice([0.02, 0.04, 0.06, 0.08, 0.10]))
-        sys.stdout.write(char)
-        sys.stdout.flush()
+        if char in [",", ".", "!", "?"]:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.4)
+        else:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(random.choice([0.02, 0.04, 0.06, 0.08, 0.10]))
+    time.sleep(1)
 
 def title_screen():
     clear_screen()
     print(TITLE)
-    time.sleep(1)
+    time.sleep(3)
 
 def intro():
     clear_screen()
-    typing("Welcome to the dungeon.")
-    time.sleep(1)
+    typing(f"You are an adventurer on a quest to slay a dragon that has been terrorizing the lands.\nYou have however lost all your equipment to a group of pesky thieves whilst sleeping.\nHowever dire your situation may be you're determined to kill this dragon.")
 
 def character_creation():
     global player
 
-    clear_screen()
-
     while True:
+        clear_screen()
         player_name = input("What is your name? -> ")
         if player_name.isalpha() and len(player_name) <= 20:
             while True:
+                clear_screen()
                 confirmation = input(f"Are you sure you want to be known as {player_name}? [Y/N] -> ").lower()
                 if confirmation in ["y", "n"]:
                     break
 
                 else:
-                    print("Invalid input. Y for Yes or N for No.")
+                    print("Invalid input.")
+                    time.sleep(1)
                     continue
 
             if confirmation == "y":
                 break
 
-            elif confirmation == "n":
-                continue
-
         else:
-            print("Invalid input. Use only letters. Can not be more than 20 characters long.")
+            print("Invalid input. Use only letters, and no more than 20 characters long.")
+            time.sleep(2)
+            continue
+
     
-    player_health = 15
+    player_health = 10
     player_attack = 1
     player_defence = 0
     player_speed = 10
@@ -59,13 +65,12 @@ def character_creation():
     player = Player(player_name, player_health, player_attack, player_defence, player_speed)
 
 def adventure():
-    clear_screen()
-
     while True:
-        choice = input('What do you want to do? [Explore/Inventory] (Type "-help" for further information) -> ').lower()
+        clear_screen()
+        choice = input('What do you want to do? [Explore/Inventory] (Type "-info" for further information) -> ').lower()
 
         if choice == "explore":
-            if choose_path():
+            if explore():
                 continue
 
             else: # THE PLAYER HAS DIED
@@ -75,8 +80,8 @@ def adventure():
             check_inventory()
             continue
 
-        elif choice == "-help":
-            if help():
+        elif choice == "-info":
+            if info():
                 continue
 
             else: # THE PLAYER CHOSE TO QUIT THE GAME
@@ -84,50 +89,150 @@ def adventure():
 
         else:
             print("Invalid input.")
+            time.sleep(1)
             continue
 
 def check_inventory():
-    clear_screen()
-
-    level_up_exp = 100 + 10 * player.level
-    
-    if len(inventory_items) == 3:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
-
-    elif len(inventory_items) == 2:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, None
-
-    elif len(inventory_items) == 1:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, None, None
-
-    else:
-        item_slot_1, item_slot_2, item_slot_3 = None, None, None
-
-    print(f'''{player.name}'s Stats
-Name: {player.name}
-HP: {player.health}/{player.max_health}
-ATK: {player.attack + player.weapon_stat[0]} ({player.weapon_stat[0]} from {player.weapon})
-DEF: {player.defence + player.armour_stat[0]} ({player.armour_stat[0]} from {player.armour})
-SPD: {player.speed + player.weapon_stat[1] + player.armour_stat[1]} ({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})
-Level: {player.level}
-Experience: {player.experience}/{level_up_exp}
-Weapon: {player.weapon}
-Armour: {player.armour}
-Item slot 1: {item_slot_1}
-Item slot 2: {item_slot_2}
-Item slot 3: {item_slot_3}''')
-
-def choose_path():
     while True:
-        direction = input("What path do you take? [North/West/East] -> ").lower()
+        clear_screen()
 
-        if direction in ["north", "west", "east"]:
-            print(f"You go {direction}.")
-            random.choice([combat, combat, combat, trap, treasure, treasure, bonfire])()
+        if player.weapon != None:
+            ATK_buff = f"(+{player.weapon_stat[0]} from {player.weapon})"
+
+        else:
+            ATK_buff = ""
+
+        if player.armour != None:
+            DEF_buff = f"(+{player.armour_stat[0]} from {player.armour})"
+
+        else:
+            DEF_buff = ""
+        
+        if player.weapon_stat[1] == 0 and player.armour_stat[1] == 0:
+            SPD_buff = ""
+
+        else:
+            if player.weapon_stat[1] != 0 and player.armour_stat[1] == 0:
+                if player.weapon_stat[1] > 0:
+                    SPD_buff = f"(+{player.weapon_stat[1]} from {player.weapon})"
+
+                else:
+                    SPD_buff = f"({player.weapon_stat[1]} from {player.weapon})"
+
+            elif player.weapon_stat[1] == 0 and player.armour_stat[1] != 0:
+                if player.armour_stat[1] > 0:
+                    SPD_buff = f"(+{player.armour_stat[1]} from {player.armour})"
+
+                else:
+                    SPD_buff = f"({player.armour_stat[1]} from {player.armour})"
+
+            else:
+                if player.weapon_stat[1] + player.armour_stat[1] > 0:
+                    SPD_buff = f"(+{player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})"
+
+                else:
+                    SPD_buff = f"({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})"
+
+        level_up_exp = 100 * player.level
+        if player.level == 10:
+            player.experience = "MAX"
+            level_up_exp = "MAX"
+        
+        if len(inventory_items) == 3:
+            item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
+
+        elif len(inventory_items) == 2:
+            item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, None
+
+        elif len(inventory_items) == 1:
+            item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, None, None
+
+        else:
+            item_slot_1, item_slot_2, item_slot_3 = None, None, None
+
+        underline = "‾" * len(player.name)
+
+        print(f'''
+    {player.name}'s Stats & Inventory
+    {underline}‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    Name: {player.name}
+    LV: {player.level}
+    EXP: {player.experience}/{level_up_exp}
+    HP: {player.health}/{player.max_health}
+    ATK: {player.attack + player.weapon_stat[0]} {ATK_buff}
+    DEF: {player.defence + player.armour_stat[0]} {DEF_buff}
+    SPD: {player.speed + player.weapon_stat[1] + player.armour_stat[1]} {SPD_buff}
+
+    Weapon: {player.weapon}
+    Armour: {player.armour}
+    Item slot 1: {item_slot_1}
+    Item slot 2: {item_slot_2}
+    Item slot 3: {item_slot_3}
+''')
+
+        player_input = input('Type "-back" to go back. -> ').lower()
+
+        if player_input == "-back":
             break
 
         else:
             print("Invalid input.")
+            time.sleep(1)
+            continue
+
+def info():
+    while True:
+        clear_screen()
+        print('''The goal of this game is to kill a dragon that has been terrorizing the lands.
+If your HP goes below zero you die and lose all of your progress.
+
+If you're wondering what some of the stats mean here is a list of them all.
+
+    LV (Level) - Your characters level.
+    After leveling up you get to chose a stat of yours to increase.
+
+    EXP (Experience Points) - Your characters experience points determines how close you are to leveling up.
+
+    HP (Hit Points) - The amount of hit points, or health, your character has.
+
+    ATK (Attack) - This stat determines how much damage you do.
+    Can be influenced by weapons.
+
+    DEF (Defence) - This stat determines how well you can defend against enemy attacks.
+    Can be influenced by armour.
+
+    SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
+    If you both have an equal speed stat, then it is random who goes first.
+    Can be influenced by both weapons and armour.
+    ''')
+
+        player_input = input('Type "-back" to go back or "-quit" to quit the game. (YOUR PROGRESS WILL NOT BE SAVED IF YOU CHOOSE TO QUIT) -> ').lower()
+
+        if player_input == "-back":
+            return True
+
+        elif player_input == "-quit":
+            return False
+        
+        else:
+            print("Invalid input.")
+            time.sleep(1)
+            continue
+
+def explore():
+    while True:
+        clear_screen()
+        direction = input("What path do you take? [North/West/East] -> ").lower()
+
+        if direction in ["north", "west", "east"]:
+            print(f"    > You go {direction}.")
+            time.sleep(2)
+            random.choice([combat, combat, combat, trap, treasure, treasure, bonfire])()
+            break
+
+        else:
+            print("    > Invalid input.")
+            time.sleep(1)
             continue
     
     if player.health <= 0:
@@ -141,36 +246,55 @@ def combat():
 
     battle = True
 
-    player_name = player.name
     player_HP = player.health
     player_ATK = player.attack + player.weapon_stat[0]
     player_DEF = player.defence + player.armour_stat[0]
     player_SPD = player.speed + player.weapon_stat[1] + player.armour_stat[1]
-    if player.level % 5 == 0:
-        enemy = random.choice(list_of_bosses)
+
+    if player.level == 5 and ogre.alive == True:
+        enemy = ogre
+
+    elif player.level == 10 and dragon.alive == True:
+        enemy = dragon
+
     else:
-        enemy = random.choice(list_of_enemies)
-    enemy_name = enemy.name
+        if player.level == 10:
+            enemy = random.choice(enemies_list_5)
+        elif player.level > 8:
+            enemy = random.choice(enemies_list_4)
+        elif player.level > 6:
+            enemy = random.choice(enemies_list_3)
+        elif player.level > 4:
+            enemy = random.choice(enemies_list_2)
+        elif player.level > 2:
+            enemy = random.choice(enemies_list_1)
+        else:
+            enemy = random.choice(enemies_list_0)
+
+        enemy_SPD = enemy.speed
+
     enemy_HP = enemy.health
+    enemy_max_HP = enemy.health
     enemy_ATK = enemy.attack
     enemy_DEF = enemy.defence
-    enemy_SPD = enemy.speed
 
-    print(f"You have encountered a {enemy_name} with {enemy_HP} HP.")
+    if enemy == ogre:
+        print("    > You encounter a fat Ogre wandering about.")
+
+    elif enemy == dragon:
+        print("    > You encounter the Dragon!")
+
+    else:
+        print(f"    > You encounter a {enemy.name}.")
+    
+    time.sleep(2)
 
     while battle:
-        print(f"{player_name} HP: {player_HP}/{player.max_health}\n{enemy_name} HP: {enemy_HP}")
-
-        player_action = input("What do you choose to do? [Attack/Defend/Item] -> ").lower()
         clear_screen()
+        if type(enemy) == Boss:
+            print(enemy.art)
 
-        if player_action not in ["attack", "defend", "item"]:
-            print("Invalid input.")
-            continue
-
-        if player_action == "defend" and player_DEF == 0:
-            print("You have 0 defence and therefore can't defend.")
-            continue
+        print(f"{player.name} HP: {player_HP}/{player.max_health}\n{enemy.name} HP: {enemy_HP}/{enemy_max_HP}")
 
         if enemy_DEF == 0:
             enemy_action = "attack"
@@ -178,71 +302,117 @@ def combat():
         else:
             enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
-        if player_action == "item":
+        player_action = input("What do you choose to do? [Attack/Defend/Item] -> ").lower()
+
+        if player_action not in ["attack", "defend", "item"]:
+            print("    > Invalid input.")
+            time.sleep(1)
+            continue
+
+        elif player_action == "defend" and player_DEF == 0:
+            print("    > You have 0 defence and therefore can't defend.")
+            time.sleep(1.5)
+            continue
+
+        elif player_action == "item":
             if len(inventory_items) == 0:
-                print("You have no items.")
+                print("    > You have no items.")
+                time.sleep(1)
                 continue
             
             else:
                 while True:
-                    item_chosen = input(f"What item do you want to use? {see_inventory_items()} -> ").lower()
+                    item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "-back" to go back) -> ').lower()
+                    if item_chosen == "-back":
+                        break
+
                     for item in inventory_items:
                         if item.name.lower() == item_chosen:
                             item_chosen = item
-                    
+
                     if item_chosen not in inventory_items:
-                        print("Invalid input.")
+                        print("    > Invalid input.")
+                        time.sleep(1)
                         continue
 
-                    if item_chosen == health_potion:
-                        player_HP += health_potion.use
+                    if item_chosen in [lesser_health_potion, health_potion, plentiful_health_potion]:
+                        player_HP += item_chosen.use
                         if player_HP > player.max_health:
                             player_HP = player.max_health
-                        print(f"You used up your health potion and gained {health_potion.use} HP. {player_name} HP: {player_HP}/{player.max_health}")
+                        print(f"    > You used up your {item_chosen.name} and gained {item_chosen.use} HP. {player.name} HP: {player_HP}/{player.max_health}")
 
-                    elif item_chosen == rock:
-                        enemy_HP -= rock.use
-                        print(f"You threw your rock at the enemy. {enemy_name} took {rock.use} points of damage.")
+                    elif item_chosen == pebble or item_chosen == rock or item_chosen == mage_scroll:
+                        enemy_HP -= item_chosen.use
+
+                        if item_chosen == pebble or item_chosen == rock:
+                            print(f"    > You threw your {item_chosen.name} at the enemy. The {enemy.name} took {item_chosen.use} points of damage.")
+
+                        else:
+                            spell = random.choice(["a Fireball", "an Ice Spike", "a Lightning Bolt"])
+                            print(f"    > You used up your mage scroll and the {enemy.name} was struck by {spell}. The {enemy.name} took {item_chosen.use} points of damage.")
+
                         if enemy_HP <= 0:
                             battle = False
 
                     elif item_chosen == smoke_bomb:
-                        print("You throw the smoke bomb on the ground and flee from battle.")
+                        if type(enemy) == Boss:
+                            print("    > You can't use this item whilst fighting a Boss.")
+                            continue
+
+                        print("    > You throw the smoke bomb on the ground and flee from battle.")
                         battle = False
 
+                    elif item_chosen == godify:
+                        player.health = 999
+                        player.max_health = 999
+                        player.attack = 999
+                        player.defence = 999
+                        player.speed = 999
+
+                        print(f"    > In an instant you transform into a GOD and the enemy runs away.")
+
+                        battle = False
+
+                    time.sleep(1.5)
                     inventory_items.remove(item_chosen)
                     break
+
+                if item_chosen == "-back":
+                    continue
 
         if battle == False:
             break
 
         if player_action == "defend" and enemy_action == "defend":
-            print("You both chose to defend and nothing happened.")
+            print("    > You both chose to defend and nothing happened.")
+            time.sleep(1)
             continue
 
         if player_action == "defend":
-            print("You chose to defend.")
+            print("    > You chose to defend.")
+            time.sleep(1)
 
         if enemy_action == "defend":
-            print(f"{enemy_name} chose to defend.")
+            print(f"    > The {enemy.name} chose to defend.")
+            time.sleep(1)
 
-        if player_SPD > enemy_SPD:
-            enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
+        if type(enemy) == Boss or player_SPD > enemy_SPD:
+            enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
             if enemy_HP <= 0:
                 battle = False
             
             else:
-                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
+                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
                     battle = False
 
         elif player_SPD < enemy_SPD:
-            player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
+            player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
             if player_HP <= 0:
                 battle = False
             
             else:
-                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
+                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
                     battle = False
 
@@ -250,39 +420,58 @@ def combat():
             who_goes_first = random.choice(["player", "enemy"])
 
             if who_goes_first == "player":
-                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
+                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
                     battle = False
                 
                 else:
-                    player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
+                    player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                     if player_HP <= 0:
                         battle = False
 
             elif who_goes_first == "enemy":
-                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK)
+                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
                     battle = False
                 
                 else:
-                    enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF)
+                    enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                     if enemy_HP <= 0:
                         battle = False
 
     if player_HP <= 0:
-        print(f"{player_name} has been slain by the {enemy_name}.")
+        clear_screen()
+        print(f"    > {player.name} has been slain by the {enemy.name}.")
+        time.sleep(1.5)
 
     elif enemy_HP <= 0:
-        print(f"You have slain the {enemy_name}.")
-        print(f"You gained {enemy.experience} experience points.")
-        player.experience += enemy.experience
-        level_up_exp = 100 + 10 * player.level
-        if player.experience > level_up_exp:
-            player.experience -= level_up_exp
-            player.level += 1
-            print(f"You leveled up! You are now level {player.level}.")
-            level_up()
-            player_HP = player.max_health
+        clear_screen()
+        print(f"    > You have slain the {enemy.name}.")
+        time.sleep(1)
+        if type(enemy) == Boss:
+            enemy.alive = False
+            loot = enemy.drop
+            print(f"    > The {enemy.name} dropped {loot.name}. {loot.description}")
+            time.sleep(1.5)
+            equip(loot)
+
+            if enemy == dragon:
+                typing("With the dragon now defeated peace will slowly start to return to the lands. However, there will still be enemies left for you to defeat.")
+                print("The game is now pretty much over. There are however some new enemies for you to discover. Thank you so much for playing! :-)")
+
+
+        elif type(enemy) != Boss and player.level != 10:
+            print(f"    > You gained {enemy.experience} experience points.")
+            time.sleep(1)
+            player.experience += enemy.experience
+            level_up_exp = 100 * player.level
+            if player.experience >= level_up_exp:
+                player.experience -= level_up_exp
+                player.level += 1
+                print(f"    > You leveled up! You are now level {player.level}.")
+                time.sleep(1)
+                level_up()
+                player_HP = player.max_health
 
     player.set_health(player_HP)
 
@@ -290,60 +479,62 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
     if player_action == "attack":
         hit = random.randint(1, 5)
         if hit == 1:
-            print("You missed.")
+            print("    > You missed.")
         
         else:
             if enemy_action == "defend":
                 success = random.randint(1, 4)
                 if success == 1:
                     dmg = player_ATK
-                    print(f"{enemy_name} failed in defending against your attack and took {dmg} points of damage.")
+                    print(f"    > The {enemy_name} failed in defending against your attack and took {dmg} points of damage.")
                     enemy_HP -= dmg
                 
                 else:
                     dmg = player_ATK - enemy_DEF
                     if dmg <= 0:
-                        print(f"{enemy_name} successfully defended against your attack and took 0 points of damage.")
+                        print(f"    > The {enemy_name} successfully defended against your attack and took 0 points of damage.")
 
                     else:
-                        print(f"{enemy_name} successfully defended against your attack and only took {dmg} points of damage.")
+                        print(f"    > The {enemy_name} successfully defended against your attack and only took {dmg} points of damage.")
                         enemy_HP -= dmg
 
             else:
                 dmg = player_ATK
-                print(f"You hit {enemy_name} for {dmg} points of damage.")
+                print(f"    > You hit the {enemy_name} for {dmg} points of damage.")
                 enemy_HP -= dmg
     
+    time.sleep(1.5)
     return enemy_HP
 
 def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK):
     if enemy_action == "attack":
         hit = random.randint(1, 5)
         if hit == 1:
-            print(f"{enemy_name} missed whilst performing an attack.")
+            print(f"    > The {enemy_name} missed whilst performing an attack.")
 
         else:
             if player_action == "defend":
                 success = random.randint(1, 4)
                 if success == 1:
                     dmg = enemy_ATK
-                    print(f"You failed in defending against {enemy_name} attack and took {dmg} points of damage.")
+                    print(f"    > You failed in defending against the {enemy_name} attack and took {dmg} points of damage.")
                     player_HP - dmg
 
                 else:
                     dmg = enemy_ATK - player_DEF
                     if dmg <= 0:
-                        print(f"You successfully defended against the enemy attack and took 0 points of damage.")
+                        print(f"    > You successfully defended against the enemy attack and took 0 points of damage.")
                     
                     else:
-                        print(f"You successfully defended against the enemy attack and only took {dmg} points of damage.")
+                        print(f"    > You successfully defended against the enemy attack and only took {dmg} points of damage.")
                         player_HP -= dmg
 
             else:
                 dmg = enemy_ATK
-                print(f"{enemy_name} hit you for {dmg} points of damage.")
+                print(f"    > The {enemy_name} hit you for {dmg} points of damage.")
                 player_HP -= dmg
 
+    time.sleep(1.5)
     return player_HP
 
 def see_inventory_items():
@@ -354,187 +545,250 @@ def see_inventory_items():
     return inventory_items_names
 
 def level_up():
-    print("You get to choose one attribute of yours to upgrade.")
-    print(f'''
-    HP: {player.health}/{player.max_health}
-    ATK: {player.attack}
-    DEF: {player.defence}
-    SPD: {player.speed}
-    ''')
-    attributes_list = ["HP", "ATK", "DEF", "SPD"]
     while True:
-        attribute = input(f"Which attribute do you want to increase? {attributes_list} -> ").upper()
-        if attribute not in attributes_list:
+        clear_screen()
+
+        print(f'''
+        You get to choose one stat of yours to increase.
+        HP: {player.health}/{player.max_health}
+        ATK: {player.attack}
+        DEF: {player.defence}
+        SPD: {player.speed}
+        ''')
+
+        attribute = input(f"Which attribute do you want to increase? [HP/ATK/DEF/SPD] -> ").upper()
+        if attribute not in ["HP", "ATK", "DEF", "SPD"]:
             print("Invalid input.")
+            time.sleep(1)
 
         elif attribute == "HP":
             player.max_health += 5
-            print("Your max HP increased by 5 points.")
+            print("    > Your max HP increased by 5 points.")
             break
 
         elif attribute == "ATK":
             player.attack += 1
-            print("Your ATK increased by 1 point.")
+            print("    > Your ATK increased by 1 point.")
             break
 
         elif attribute == "DEF":
             player.defence += 1
-            print("Your DEF increased by 1 point.")
+            print("    > Your DEF increased by 1 point.")
             break
 
         elif attribute == "SPD":
             player.speed += 1
-            print("Your SPD increased by 1 point.")
+            print("    > Your SPD increased by 1 point.")
             break
+    time.sleep(1.5)
 
 def trap():
-    trap_message = random.choice(list_trap_messages)
+    clear_screen()
+    trap_message = random.choice(trap_messages)
     print(trap_message)
     dmg = random.randint(1, 2)
-    print(f"You take {dmg} points of damage.")
+    print(f"    > You take {dmg} points of damage.")
     player.health -= dmg
 
 def treasure():
-    print("You find a treasure chest! Let's take a look at what's inside.")
-    loot()
+    clear_screen()
+    print("    > You find a treasure chest! Let's take a look at what's inside.")
+    time.sleep(1)
 
-def loot():
-    loot_table = random.choice(["item", "weapon", "armour"])
-    if loot_table == "item":
-        loot = random.choice(loot_items)
-        print(f"You found a {loot.name}. {loot.description}")
+    if player.level > 10:
+        loot = random.choice(loot_pool_5)
+
+    elif player.level > 8:
+        loot = random.choice(loot_pool_4)
+
+    elif player.level > 6:
+        loot = random.choice(loot_pool_3)
+
+    elif player.level > 4:
+        loot = random.choice(loot_pool_2)
+
+    elif player.level > 2:
+        loot = random.choice(loot_pool_1)
+
+    else:
+        loot = random.choice(loot_pool_0)
+
+    if loot in loot_items:
+        print(f"    > You found a {loot.name}. {loot.description}")
+        time.sleep(1.5)
         add_to_items(loot)
 
-    elif loot_table == "weapon":
-        loot = random.choice(loot_weapons)
-        print(f"You found a {loot.name}. {loot.description}")
+    elif loot in loot_weapons:
+        print(f"    > You found a {loot.name}. {loot.description}")
+        time.sleep(1.5)
         equip(loot)
 
-    elif loot_table == "armour":
-        loot = random.choice(loot_armour)
-        print(f"You found {loot.name}. {loot.description}")
+    elif loot in loot_armour:
+        print(f"    > You found {loot.name}. {loot.description}")
+        time.sleep(1.5)
         equip(loot)
 
 def add_to_items(loot):
+    clear_screen()
     if len(inventory_items) >= 3:
-        print(f"You pockets are full, you'd have to throw something away if you want to keep {loot.name}.")
+        print(f"Your pockets are full, you'd have to throw something away if you want to keep {loot.name}.")
         while True:
+            clear_screen()
             throw_or_keep = input(f"Do you want to throw something away and keep {loot.name}? [Y/N] -> ").lower()
 
             if throw_or_keep == "y":
                 while True:
-                    discard = input(f"What do you want to throw away? {see_inventory_items()} -> ").lower()
+                    clear_screen()
+                    discard = input(f'What do you want to throw away? {see_inventory_items()} (Type "-back" to go back) -> ').lower()
+                    if discard == "-back":
+                        break
 
                     for item in inventory_items:
                         if item.name.lower() == discard:
                             discard = item
 
                     if discard not in inventory_items:
-                        print("Invalid input.")
+                        print("    > Invalid input.")
+                        time.sleep(1)
                         continue
 
                     else:
                         inventory_items.remove(discard)
                         inventory_items.append(loot)
                         break
+                if discard == "-back":
+                    continue
+
                 break
 
             elif throw_or_keep == "n":
-                print(f"You threw away {loot.name}.")
+                print(f"    > You threw away {loot.name}.")
+                time.sleep(1)
                 break
 
             else:
-                print("Invalid input.")
+                print("    > Invalid input.")
+                time.sleep(1)
                 continue
 
     else:
-        print(f"You put {loot.name} in your pocket.")
+        print(f"    > You put {loot.name} in your pocket.")
+        time.sleep(1)
         inventory_items.append(loot)
 
 def equip(loot):
+    clear_screen()
     if loot in loot_weapons:
         if player.weapon == None:
-            print(f"You equipped {loot.name}.")
             player.weapon = loot.name
             player.weapon_stat = loot.use
+            print(f"    > You equipped {loot.name}.")
+            time.sleep(1)
 
         else:
-            while True:
-                change_or_keep = input(f"Do you want to change from your {player.weapon} to {loot.name}? [Y/N] -> ").lower()
-                if change_or_keep == "y":
-                    print(f"You decide to leave your {player.weapon} behind and switch to {loot.name}.")
-                    player.weapon = loot.name
-                    player.weapon_stat = loot.use
-                    break
+            if player.weapon == loot.name:
+                print(f"    > You already have a {loot.name} equipped, so you decide to leave it behind.")
+                time.sleep(1.5)
 
-                elif change_or_keep == "n":
-                    print(f"You decide to keep your {player.weapon}.")
-                    break
+            else:
+                while True:
+                    clear_screen()
+                    change_or_keep = input(f"Do you want to change from your {player.weapon} [ATK: {player.weapon_stat[0]}, SPD: {player.weapon_stat[1]}] to a {loot.name} [ATK: {loot.use[0]}, SPD: {loot.use[1]}]? [Y/N] -> ").lower()
+                    if change_or_keep == "y":
+                        print(f"    > You decide to leave your {player.weapon} behind and switch to {loot.name}.")
+                        time.sleep(1.5)
+                        player.weapon = loot.name
+                        player.weapon_stat = loot.use
+                        break
 
-                else:
-                    print("Invalid input.")
-                    continue
+                    elif change_or_keep == "n":
+                        print(f"    > You decide to keep your {player.weapon}.")
+                        time.sleep(1)
+                        break
+
+                    else:
+                        print("    > Invalid input.")
+                        time.sleep(1)
+                        continue
 
     elif loot in loot_armour:
         if player.armour == None:
             player.armour = loot.name
             player.armour_stat = loot.use
-            print(f"You equipped {loot.name}.")
+            print(f"    > You equipped {loot.name}.")
+            time.sleep(1)
 
         else:
-            while True:
-                change_or_keep = input(f"Do you want to change from your {player.armour} to {loot.name}? [Y/N] -> ").lower()
-                if change_or_keep == "y":
-                    print(f"You decide to leave your {player.armour} behind and switch to {loot.name}.")
-                    player.armour = loot.name
-                    player.armour_stat = loot.use
-                    break
+            if player.armour == loot.name:
+                print(f"    > You already have {loot.name} equipped, so you decide to leave it behind.")
+                time.sleep(1.5)
 
-                elif change_or_keep == "n":
-                    print(f"You decide to keep your {player.armour}.")
-                    break
+            else:
+                while True:
+                    clear_screen()
+                    change_or_keep = input(f"Do you want to change from your {player.armour} [DEF: {player.armour_stat[0]}, SPD: {player.armour_stat[1]}] to {loot.name} [DEF: {loot.use[0]}, SPD: {loot.use[1]}]? [Y/N] -> ").lower()
+                    if change_or_keep == "y":
+                        print(f"    > You decide to leave your {player.armour} behind and switch to {loot.name}.")
+                        time.sleep(1.5)
+                        player.armour = loot.name
+                        player.armour_stat = loot.use
+                        break
 
-                else:
-                    print("Invalid input.")
-                    continue
+                    elif change_or_keep == "n":
+                        print(f"    > You decide to keep your {player.armour}.")
+                        time.sleep(1)
+                        break
+
+                    else:
+                        print("    > Invalid input.")
+                        time.sleep(1)
+                        continue
 
 def bonfire():
     while True:
         rest = input("You find yourself in a room with a bonfire. Do you choose to rest here? [Y/N] -> ").lower()
         if rest == "y":
-            print(f"You current health is {player.health}")
-            sleep_hours = int(input("For how many hours do you wanna rest? -> "))
-            for hour in range(sleep_hours):
-                if random.randint(1, 4) != 1:
-                    player.health += 1
-                    print(f"You recovered to {player.health} HP while resting")
-                    if player.health > player.max_health:
-                        player.health = player.max_health
-                else:
-                    print(random.choice(list_enemy_messages))
-                    combat()
-                    break
-                choose_path()
+            if player.health == player.max_health:
+                print("You change your mind. You don't feel like resting at the moment.")
+                break
+
+            else:
+                while True:
+                    try:
+                        hours = int(input("For how long do you wish to rest? (the amount of hours, between 1-10) -> "))
+                    except:
+                        print("Invalid input.")
+                        time.sleep(1)
+                        continue
+
+                    if hours >= 1 and hours <= 10:
+                        for hour in range(hours):
+                            if random.randint(1, 100) < (hour + 1) * 5:
+                                disturb_message = random.choice(disturb_messages)
+                                print(disturb_message)
+                                time.sleep(4)
+                                combat()
+                                break
+
+                            else:
+                                player.health += 1
+                                print("You gained 1 HP.")
+                                if player.health == player.max_health:
+                                    print("You are now at full HP.")
+                                    break
+                                time.sleep(0.3)
+                        break
+
+                    else:
+                        print("Invalid input.")
+                        time.sleep(1)
+                        continue
+                break
 
         elif rest == "n":
             break
 
         else:
             print("Invalid input.")
-
-def help():
-    clear_screen()
-    print("The goal of this game is to kill enemies in order increase your score and get as high of a highscore as possible.\nIf your HP goes below zero you die and lose all of your progress.")
-
-    while True:
-        player_input = input('Type "-back" to go back or "-quit" to quit the game. -> ')
-
-        if player_input == "-back":
-            return True
-
-        elif player_input == "-quit":
-            return False
-        
-        else:
-            print("Invalid input.")
+            time.sleep(1)
             continue
