@@ -28,7 +28,7 @@ def title_screen():
 
 def intro():
     clear_screen()
-    typing(f"You are an adventurer on a quest to slay a dragon that has been terrorizing the lands.\nYou have however lost all your equipment to a group of pesky thieves whilst sleeping.\nHowever dire your situation may be you're determined to kill this dragon.")
+    typing(f"You are an adventurer on a quest to slay a dragon that has been terrorizing the lands.\nYou have however lost all your equipment to a group of pesky thieves whilst sleeping.\nHowever dire your situation may be you are determined to kill this dragon.")
 
 def character_creation():
     global player
@@ -150,11 +150,9 @@ def check_inventory():
         else:
             item_slot_1, item_slot_2, item_slot_3 = None, None, None
 
-        underline = "‾" * len(player.name)
-
         print(f'''
     {player.name}'s Stats & Inventory
-    {underline}‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    {"‾" * len(player.name)}‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     Name: {player.name}
     LV: {player.level}
     EXP: {player.experience}/{level_up_exp}
