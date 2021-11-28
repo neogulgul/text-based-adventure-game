@@ -8,5 +8,5 @@ trap_messages = [
 disturb_messages = [
     "You get ambushed by an enemy whilst resting.",
     "Something wakes you up by poking at your feet.",
-    "You're awoken by a foe."
+    "You are awoken by a foe."
 ]

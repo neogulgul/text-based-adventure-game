@@ -172,20 +172,19 @@ If your HP goes below zero you die and lose all of your progress.
 
 If you are wondering what some of the stats mean, here is a list of them all.
 
-    LV (Level) - Your characters level.
-    After leveling up you get to chose a stat of yours to increase.
+    • LV (Level) - After leveling up you get to choose a stat of yours to increase.
 
-    EXP (Experience Points) - Your characters experience points determines how close you are to leveling up.
+    • EXP (Experience Points) - Your character's experience points determine how close you are to leveling up.
 
-    HP (Hit Points) - The amount of hit points, or health, your character has.
+    • HP (Hit Points) - The amount of hit points, or health, your character has.
 
-    ATK (Attack) - This stat determines how much damage you do.
+    • ATK (Attack) - This stat determines how much damage you do.
     Can be influenced by weapons.
 
-    DEF (Defence) - This stat determines how well you can defend against enemy attacks.
+    • DEF (Defence) - This stat determines how well you can defend against enemy attacks.
     Can be influenced by armour.
 
-    SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
+    • SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
     If you both have an equal speed stat, then it is random who goes first.
     Can be influenced by both weapons and armour.
     ''')
@@ -547,7 +546,7 @@ def trap():
     typing(trap_message)
     dmg = random.randint(1, 2)
     player.health -= dmg
-    typing(f"You took {dmg} point{s_or_no_s(dmg)} of damage.")
+    typing(f"You take {dmg} point{s_or_no_s(dmg)} of damage.")
 
 def treasure():
     clear_screen()
