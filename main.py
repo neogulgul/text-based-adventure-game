@@ -603,7 +603,45 @@ def level_up():
             typing("Your SPD increased by 1 point.")
             break
 
+def trap():
+    clear_screen()
+    trap_message = random.choice(trap_messages)
+    typing(trap_message)
+    dmg = random.randint(1, 2)
+    player.health -= dmg
+    typing(f"You take {dmg} point{s_or_no_s(dmg)} of damage.")
 
+
+def treasure():
+    clear_screen()
+    typing("You find a treasure chest! Let us take a look at what is inside.")
+
+    if player.level > 8:
+        loot = random.choice(loot_pool_4)
+
+    elif player.level > 6:
+        loot = random.choice(loot_pool_3)
+
+    elif player.level > 4:
+        loot = random.choice(loot_pool_2)
+
+    elif player.level > 2:
+        loot = random.choice(loot_pool_1)
+
+    else:
+        loot = random.choice(loot_pool_0)
+
+    if loot in loot_items:
+        typing(f"You found a {loot.name}. {loot.description}")
+        add_to_items(loot)
+
+    elif loot in loot_weapons:
+        typing(f"You found a {loot.name}. {loot.description}")
+        equip(loot)
+
+    elif loot in loot_armour:
+        typing(f"You found {loot.name}. {loot.description}")
+        equip(loot)
 
 
 
@@ -702,3 +740,40 @@ def equip(loot):
                         typing(f"You decide to keep your {player.armour}.")
                         break
 
+def bonfire():
+    while True:
+        clear_screen()
+        rest = input("You find yourself in a room with a bonfire. Do you choose to rest here? [Y/N] -> ").lower()
+        if rest == "y":
+            if player.health == player.max_health:
+                typing("You change your mind. You do not feel like resting at the moment.")
+                break
+
+            else:
+                while True:
+                    clear_screen()
+                    try:
+                        hours = int(input("For how long do you wish to rest? (the amount of hours, between 1-10) -> "))
+                    except:
+                        continue
+
+                    if hours >= 1 and hours <= 10:
+                        for hour in range(hours):
+                            if random.randint(1, 100) < (hour + 1) * 5:
+                                disturb_message = random.choice(disturb_messages)
+                                typing(disturb_message)
+                                combat()
+                                break
+
+                            else:
+                                player.health += 1
+                                print("+1 HP")
+                                time.sleep(0.3)
+                                if player.health == player.max_health:
+                                    typing("You are now at full HP.")
+                                    break
+                        break
+                break
+
+        elif rest == "n":
+            break
