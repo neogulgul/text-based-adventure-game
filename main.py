@@ -95,23 +95,23 @@ def explore():
         direction = input("Which way do you go? [1. North / 2. West / 3. East] -> ").lower()
 
         if direction in ["north", "1"]:
-            typing("You go north.")
+            typing(f"You go north. {random.choice(travel_messages)}.")
             random.choice(rooms)()
             break
 
         elif direction in ["west", "2"]:
-            typing("You go west.")
+            typing(f"You go west. {random.choice(travel_messages)}.")
             random.choice(rooms)()
             break
 
         elif direction in ["east", "3"]:
-            typing("You go east.")
+            typing(f"You go east. {random.choice(travel_messages)}.")
             random.choice(rooms)()
             break
     
     if player.health <= 0:
         typing(f"You have died. Game Over.")
-        typing(f"You reached lv {player.level} and defeated {game_info.enemy_count} enemies")
+        typing(f"You reached LV.{player.level} and defeated {game_info.enemy_count} enemies.")
         return False
 
     game_info.plus_room_count()
@@ -256,7 +256,7 @@ Bosses:
 {boss_1}
 {boss_2}
 
-PRO TIP: It is faster to type only the number infront of a given input (if it has one) instead of the whole word.
+PRO TIP: It is faster to type only the number in front of a given input (if it has one) instead of the whole word.
 This does not work for commands such as "-back" for example, inputs with a dash (-) in front.
 ''')
 
@@ -606,12 +606,10 @@ def level_up():
 
 def trap():
     clear_screen()
-    trap_message = random.choice(trap_messages)
-    typing(trap_message)
+    typing(random.choice(trap_messages))
     dmg = random.randint(1, 2)
     player.health -= dmg
     typing(f"You take {dmg} point{s_or_no_s(dmg)} of damage.")
-
 
 def treasure():
     clear_screen()
@@ -643,8 +641,6 @@ def treasure():
     elif loot in loot_armour:
         typing(f"You found {loot.name}. {loot.description}")
         equip(loot)
-
-
 
 def add_to_items(loot):
     if len(inventory_items) >= 3:
@@ -761,8 +757,7 @@ def bonfire():
                     if hours >= 1 and hours <= 10:
                         for hour in range(hours):
                             if random.randint(1, 100) < (hour + 1) * 5:
-                                disturb_message = random.choice(disturb_messages)
-                                typing(disturb_message)
+                                typing(random.choice(disturb_messages))
                                 combat()
                                 break
 
