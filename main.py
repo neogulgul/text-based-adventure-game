@@ -111,6 +111,7 @@ def explore():
     
     if player.health <= 0:
         typing(f"You have died. Game Over.")
+        typing(f"You reached lv {player.level} and defeated {game_info.enemy_count} enemies")
         return False
 
     game_info.plus_room_count()
