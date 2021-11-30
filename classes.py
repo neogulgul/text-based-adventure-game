@@ -145,4 +145,4 @@ loot_pool_2 = [health_potion, smoke_bomb, steel_sword, steel_dagger, leather_arm
 loot_pool_3 = [health_potion, smoke_bomb, elven_dagger, orcish_mace, elven_armour, orcish_armour] # player lvl. 7-8
 loot_pool_4 = [plentiful_health_potion, smoke_bomb, mage_scroll, ancient_nordic_shortsword, ancient_nordic_greatsword, shrouded_armour, ancient_nordic_armour] # player lvl. 9+
 
-inventory_items = [pebble, rock, health_potion] # The player's inventory of usable items
+inventory_items = [] # The player's inventory of usable items
