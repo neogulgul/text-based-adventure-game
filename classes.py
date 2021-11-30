@@ -107,11 +107,11 @@ smoke_bomb = Item("Smoke Bomb", "Can get you out of trouble in a pinch.", None)
 loot_items = [lesser_health_potion, health_potion, plentiful_health_potion, pebble, rock, mage_scroll, smoke_bomb]
 
 # Weapons - weapon = Item(name, description, [attack, speed])
-wooden_sword = Item("Wooden Sword", "LOREM IPSUM", [2, 0])
+wooden_sword = Item("Wooden Sword", "Better than a stick", [2, 0])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [3, 0])
-steel_sword = Item("Steel Sword", "LOREM IPSUM", [4, 0])
-butter_knife = Item("Butter Knife", "LOREM IPSUM", [0, 3])
-iron_dagger = Item("Iron Dagger", "LOREM IPSUM", [1, 1])
+steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [4, 0])
+butter_knife = Item("Butter Knife", "Makes the best buttered bread.", [0, 3])
+iron_dagger = Item("Iron Dagger", "Makes stabbing great.", [1, 1])
 steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [3, 2])
 elven_dagger = Item("Elven Dagger", "LOREM IPSUM", [3, 4])
 rusty_mace = Item("Rusty Mace", "LOREM IPSUM", [3, -1])
@@ -124,17 +124,17 @@ loot_weapons = [wooden_sword, iron_sword, steel_sword, iron_dagger, steel_dagger
 
 # Armour - armour = Item(name, description, [defence, speed])
 # "light armour"
-hide_armour = Item("Hide Armour", "LOREM IPSUM", [1, 0])
-fur_armour = Item("Fur Armour", "LOREM IPSUM", [2, 0])
-leather_armour = Item("Leather Armour", "LOREM IPSUM", [3, 0])
-elven_armour = Item("Elven Armour", "LOREM IPSUM", [4, 2])
-shrouded_armour = Item("Shrouded Armour", "LOREM IPSUM", [5, 4])
+hide_armour = Item("Hide Armour", "Looks like deer, smells like deer.", [1, 0])
+fur_armour = Item("Fur Armour", "Warm armour, great against the northern cold.", [2, 0])
+leather_armour = Item("Leather Armour", "Tough leathery armor.", [3, 0])
+elven_armour = Item("Elven Armour", "Light armor that provides great speed.", [4, 2])
+shrouded_armour = Item("Shrouded Armour", "This armour worn by the Dark Brotherhood.", [5, 4])
 # "heavy armour"
-rusty_armour = Item("Rusty Armour", "LOREM IPSUM", [2, -2])
+rusty_armour = Item("Rusty Armour", "This armour has seen better days.", [2, -2])
 iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [3, -2])
-steel_armour = Item("Steel Armour", "LOREM IPSUM", [4, -2])
-orcish_armour = Item("Orchish Armour", "LOREM IPSUM", [6, -3])
-ancient_nordic_armour = Item("Ancient Nordic Armour", "LOREM IPSUM", [9, -3])
+steel_armour = Item("Steel Armour", "Forged in the mountains by dwarfs.", [4, -2])
+orcish_armour = Item("Orchish Armour", "Smells like orc.", [6, -3])
+ancient_nordic_armour = Item("Ancient Nordic Armour", "This cold frozen armour was thought to be a myth.", [9, -3])
 
 loot_armour = [hide_armour, fur_armour, leather_armour, elven_armour, shrouded_armour, rusty_armour, iron_armour, steel_armour, orcish_armour, ancient_nordic_armour, dragonscale_armour]
 
