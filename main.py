@@ -1,7 +1,6 @@
 import math
 import os
 import random
-import sys
 import time
 from art import *
 from classes import *
@@ -16,15 +15,25 @@ def typing(message):
     time.sleep(0.5)
     for char in message:
         if char in [",", ".", "!", "?"]:
-            sys.stdout.write(char)
-            sys.stdout.flush()
-            time.sleep(0.4)
+            print(char, end = "", flush = True)
+            time.sleep(0.5)
         else:
-            sys.stdout.write(char)
-            sys.stdout.flush()
+            print(char, end = "", flush = True)
             time.sleep(random.choice([0.02, 0.03, 0.04, 0.05]))
     time.sleep(1)
     print("")
+
+def a_or_an(word):
+    if word[0].lower() in ["a", "e", "i", "o", "u", "y"]:
+        return "an"
+
+    return "a"
+
+def s_or_no_s(dmg):
+    if dmg == 1:
+        return "" # no s :(
+
+    return "s" # s :)
 
 def title_screen():
     clear_screen()
@@ -53,7 +62,7 @@ def character_creation():
                 break
 
         else:
-            print("ERROR: ", end="", flush=True)
+            print("ERROR: ", end = "", flush = True)
             typing("Only letters from the alphabet are allowed, and no more than 20 characters long.")
 
     
@@ -231,7 +240,7 @@ If your HP goes below zero you die and lose all of your progress.
 
 If you are wondering what some of the stats mean, here is a list of them all.
 
-    • LV (Level) - After leveling up you get to choose a stat of yours to increase.
+    • LV (Level) - After leveling up you get to choose one stat of yours to increase.
 
     • EXP (Experience Points) - Your character's experience points determine how close you are to leveling up.
 
@@ -311,7 +320,7 @@ def combat():
         typing("You encounter the Dragon!")
 
     else:
-        typing(f"You encounter a {enemy.name}.")
+        typing(f"You encounter {a_or_an(enemy.name)} {enemy.name}.")
 
     while battle:
         clear_screen()
@@ -377,8 +386,8 @@ def combat():
                             typing(f"You threw your {item_chosen.name} at the enemy. The {enemy.name} took {item_chosen.use} points of damage.")
 
                         else:
-                            spell = random.choice(["a Fireball", "an Ice Spike", "a Lightning Bolt"])
-                            typing(f"You used up your mage scroll and the {enemy.name} was struck by {spell}. The {enemy.name} took {item_chosen.use} points of damage.")
+                            spell = random.choice(["Fireball", "Ice Spike", "Lightning Bolt"])
+                            typing(f"You used up your mage scroll and the {enemy.name} was struck by {a_or_an(spell)} {spell}. The {enemy.name} took {item_chosen.use} points of damage.")
 
                         if enemy_HP <= 0:
                             battle = False
@@ -543,15 +552,6 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
 
     return player_HP
 
-def s_or_no_s(dmg):
-    if dmg == 1:
-        s = "" # no s :(
-    
-    else:
-        s = "s" # s :)
-
-    return s
-
 def see_inventory_items():
     see_inventory_items = []
     for item in inventory_items:
@@ -629,11 +629,11 @@ def treasure():
         loot = random.choice(loot_pool_0)
 
     if loot in loot_items:
-        typing(f"You found a {loot.name}. {loot.description}")
+        typing(f"You found {a_or_an(loot.name)} {loot.name}. {loot.description}")
         add_to_items(loot)
 
     elif loot in loot_weapons:
-        typing(f"You found a {loot.name}. {loot.description}")
+        typing(f"You found {a_or_an(loot.name)} {loot.name}. {loot.description}")
         equip(loot)
 
     elif loot in loot_armour:
@@ -695,14 +695,14 @@ def equip(loot):
 
         else:
             if player.weapon == loot.name:
-                typing(f"You already have a {loot.name} equipped, so you decide to leave it behind.")
+                typing(f"You already have {a_or_an(loot.name)} {loot.name} equipped, so you decide to leave it behind.")
 
             else:
                 while True:
                     clear_screen()
                     change_or_keep = input(f"Do you want to switch from your {player.weapon} [ATK: {player.weapon_stat[0]}, SPD: {player.weapon_stat[1]}] to the {loot.name} [ATK: {loot.use[0]}, SPD: {loot.use[1]}]? [Y/N] -> ").lower()
                     if change_or_keep == "y":
-                        typing(f"You decide to leave your {player.weapon} behind and switch to a {loot.name}.")
+                        typing(f"You decide to leave your {player.weapon} behind and switch to {a_or_an(loot.name)} {loot.name}.")
                         player.weapon = loot.name
                         player.weapon_stat = loot.use
                         break

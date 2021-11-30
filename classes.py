@@ -96,7 +96,7 @@ Item creation with the use of the Item class and defining attributes for each un
 item = Item(name, description, use)
 '''
 # Items - item = Item(name, description, value)
-lesser_health_potion = Item("Lesser Health Potion", "A flask filled with a bright red liquid. Restores 5 HP. ", 5)
+lesser_health_potion = Item("Lesser Health Potion", "A flask filled with a bright red liquid. Restores 5 HP.", 5)
 health_potion = Item("Health Potion", "A flask filled with a bright red liquid. Restores 10 HP.", 10)
 plentiful_health_potion = Item("Plentiful Health Potion", "A flask filled with a bright red liquid. Restores 15 HP.", 15)
 pebble = Item("Pebble", "You can throw it at your foes.", 3)
@@ -120,7 +120,7 @@ orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [6,
 ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [6, 3])
 ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [9, -3])
 
-loot_weapons = [wooden_sword, iron_sword, steel_sword, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
+loot_weapons = [wooden_sword, iron_sword, steel_sword, butter_knife, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
 
 # Armour - armour = Item(name, description, [defence, speed])
 # "light armour"
