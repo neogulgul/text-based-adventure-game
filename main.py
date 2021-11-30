@@ -67,7 +67,7 @@ def character_creation():
 def adventure():
     while True:
         clear_screen()
-        choice = input('What do you want to do? [1. Explore / 2. Inventory] (Type "-info" for further information) -> ').lower()
+        choice = input('What do you want to do? [1. Explore / 2. Inventory] (Type "info" for further information) -> ').lower()
 
         if choice in ["explore", "1"]:
             if explore():
@@ -80,7 +80,7 @@ def adventure():
             check_inventory()
             continue
 
-        elif choice == "-info":
+        elif choice == "info":
             if info():
                 continue
 
@@ -95,23 +95,23 @@ def explore():
         direction = input("Which way do you go? [1. North / 2. West / 3. East] -> ").lower()
 
         if direction in ["north", "1"]:
-            typing(f"You go north. {random.choice(travel_messages)}.")
+            typing(f"You go north. {random.choice(travel_messages)}")
             random.choice(rooms)()
             break
 
         elif direction in ["west", "2"]:
-            typing(f"You go west. {random.choice(travel_messages)}.")
+            typing(f"You go west. {random.choice(travel_messages)}")
             random.choice(rooms)()
             break
 
         elif direction in ["east", "3"]:
-            typing(f"You go east. {random.choice(travel_messages)}.")
+            typing(f"You go east. {random.choice(travel_messages)}")
             random.choice(rooms)()
             break
     
     if player.health <= 0:
         typing(f"You have died. Game Over.")
-        typing(f"You reached LV.{player.level} and defeated {game_info.enemy_count} enemies.")
+        typing(f"In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
         return False
 
     game_info.plus_room_count()
@@ -193,9 +193,9 @@ def check_inventory():
     Item slot 3: {item_slot_3}
 ''')
 
-        player_input = input('Type "-back" to go back. -> ').lower()
+        player_input = input('Type "back" to go back. -> ').lower()
 
-        if player_input == "-back":
+        if player_input == "back":
             break
 
 def info():
@@ -257,15 +257,14 @@ Bosses:
 {boss_2}
 
 PRO TIP: It is faster to type only the number in front of a given input (if it has one) instead of the whole word.
-This does not work for commands such as "-back" for example, inputs with a dash (-) in front.
 ''')
 
-        player_input = input('Type "-back" to go back or "-quit" to quit the game. -> ').lower()
+        player_input = input('Type "back" to go back or "quit" to quit the game. -> ').lower()
 
-        if player_input == "-back":
+        if player_input == "back":
             return True
 
-        elif player_input == "-quit":
+        elif player_input == "quit":
             return False
 
 def combat():
@@ -345,8 +344,8 @@ def combat():
             else:
                 while True:
                     clear_screen()
-                    item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "-back" to go back) -> ').lower()
-                    if item_chosen == "-back":
+                    item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    if item_chosen == "back":
                         break
 
                     for item in inventory_items:
@@ -395,7 +394,7 @@ def combat():
                     inventory_items.remove(item_chosen)
                     break
 
-                if item_chosen == "-back":
+                if item_chosen == "back":
                     continue
 
         if battle == False:
@@ -455,7 +454,6 @@ def combat():
                         battle = False
 
     if player_HP <= 0:
-        clear_screen()
         typing(f"{player.name} has been slain by the {enemy.name}.")
 
     elif enemy_HP <= 0:
@@ -652,8 +650,8 @@ def add_to_items(loot):
             if throw_or_keep == "y":
                 while True:
                     clear_screen()
-                    discard = input(f'What do you want to throw away? {see_inventory_items()} (Type "-back" to go back) -> ').lower()
-                    if discard == "-back":
+                    discard = input(f'What do you want to throw away? {see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    if discard == "back":
                         break
 
                     for item in inventory_items:
@@ -675,17 +673,17 @@ def add_to_items(loot):
                         inventory_items.append(loot)
                         break
 
-                if discard == "-back":
+                if discard == "back":
                     continue
 
                 break
 
             elif throw_or_keep == "n":
-                typing(f"You threw away {loot.name}.")
+                typing(f"You threw away the {loot.name}.")
                 break
 
     else:
-        typing(f"You put {loot.name} in your pocket.")
+        typing(f"You put the {loot.name} in your pocket.")
         inventory_items.append(loot)
 
 def equip(loot):

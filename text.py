@@ -1,9 +1,8 @@
 travel_messages = [
     "The path ahead is crooked.",
     "You feel as if someone is watching you.",
-    "You feel like you been here before.",
     "This place stinks.",
-    "The ground is covered by a suspicious sludge of some kind.",
+    "The ground is covered with mud."
 ]
 
 trap_messages = [
