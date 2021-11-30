@@ -43,6 +43,19 @@ class Item:
         self.description = description
         self.use = use
 
+class Game_Info:
+    def __init__(self):
+        self.room_count = 0
+        self.enemy_count = 0
+
+    def plus_room_count(self):
+        self.room_count += 1
+
+    def plus_enemy_count(self):
+        self.enemy_count += 1
+
+game_info = Game_Info()
+
 '''
 Enemy creation with the use of the Enemy class and defining attributes for each unique enemy.
 
@@ -50,23 +63,20 @@ enemy = Enemy(name, health, attack, defence, speed, experience)
 '''
 green_slime = Enemy("Green Slime", 3, 1, 0, 10, 50)
 gnome = Enemy("Gnome", 2, 1, 0, 12, 50)
-goblin = Enemy("Goblin", 6, 2, 1, 9, 100)
+goblin = Enemy("Goblin", 6, 2, 1, 8, 100)
 skeleton = Enemy("Skeleton", 4, 2, 2, 8, 100)
 red_slime = Enemy("Red Slime", 9, 3, 0, 10, 150)
-evil_mushroom = Enemy("Evil Mushroom", 11, 3, 1, 6, 150)
-treant = Enemy("Treant", 15, 4, 5, 5, 200)
-forest_elemental = Enemy("Forest Elemental", 12, 3, 3, 12, 200)
-blue_slime = Enemy("Blue Slime", 15, 5, 0, 10, 250)
-water_elemental = Enemy("Water Elemental", 12, 4, 4, 12, 250)
-draugr = Enemy("Draugr", 15, 5, 3, 9, None)
-troll = Enemy("Troll", 20, 5, 5, 7, None)
+golem = Enemy("Golem", 10, 0, 0, 8, 150)
+treant = Enemy("Treant", 10, 0, 0, 8, 200)
+draugr = Enemy("Draugr", 10, 0, 0, 8, 200)
+blue_slime = Enemy("Blue Slime", 15, 0, 0, 10, 250)
+troll = Enemy("Troll", 10, 0, 0, 8, 250)
 
 enemies_list_0 = [green_slime, gnome] # player lvl. 1-2
 enemies_list_1 = [goblin, skeleton] # player lvl. 3-4
-enemies_list_2 = [red_slime, evil_mushroom] # player lvl. 5-6
-enemies_list_3 = [treant, forest_elemental] # player lvl. 7-8
-enemies_list_4 = [blue_slime, water_elemental] # player lvl. 9-10
-enemies_list_5 = [draugr, troll] # player lvl. 10+
+enemies_list_2 = [red_slime, golem] # player lvl. 5-6
+enemies_list_3 = [treant, draugr] # player lvl. 7-8
+enemies_list_4 = [blue_slime, troll] # player lvl. 9+
 
 '''
 Boss creation with the use of the Boss class and defining attrbiutes for each unique boss.
@@ -93,7 +103,6 @@ pebble = Item("Pebble", "You can throw it at your foes.", 3)
 rock = Item("Rock", "You can throw it at your foes.", 6)
 mage_scroll = Item("Mage Scroll", "You are unable to decipher what is written on the scroll.", 12)
 smoke_bomb = Item("Smoke Bomb", "Can get you out of trouble in a pinch.", None)
-godify = Item("Godify", "Makes you a God.", None)
 
 loot_items = [lesser_health_potion, health_potion, plentiful_health_potion, pebble, rock, mage_scroll, smoke_bomb]
 
@@ -101,14 +110,15 @@ loot_items = [lesser_health_potion, health_potion, plentiful_health_potion, pebb
 wooden_sword = Item("Wooden Sword", "LOREM IPSUM", [2, 0])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [3, 0])
 steel_sword = Item("Steel Sword", "LOREM IPSUM", [4, 0])
+butter_knife = Item("Butter Knife", "LOREM IPSUM", [0, 3])
 iron_dagger = Item("Iron Dagger", "LOREM IPSUM", [1, 1])
 steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [3, 2])
 elven_dagger = Item("Elven Dagger", "LOREM IPSUM", [3, 4])
 rusty_mace = Item("Rusty Mace", "LOREM IPSUM", [3, -1])
 troll_club = Item("Troll Club", "It reeks of troll.", [4, -1])
 orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [6, -2])
-ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [5, 2])
-ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [8, -1])
+ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [6, 3])
+ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [9, -3])
 
 loot_weapons = [wooden_sword, iron_sword, steel_sword, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
 
@@ -117,23 +127,22 @@ loot_weapons = [wooden_sword, iron_sword, steel_sword, iron_dagger, steel_dagger
 hide_armour = Item("Hide Armour", "LOREM IPSUM", [1, 0])
 fur_armour = Item("Fur Armour", "LOREM IPSUM", [2, 0])
 leather_armour = Item("Leather Armour", "LOREM IPSUM", [3, 0])
-elven_armour = Item("Elven Armour", "LOREM IPSUM", [4, 3])
+elven_armour = Item("Elven Armour", "LOREM IPSUM", [4, 2])
 shrouded_armour = Item("Shrouded Armour", "LOREM IPSUM", [5, 4])
 # "heavy armour"
 rusty_armour = Item("Rusty Armour", "LOREM IPSUM", [2, -2])
-iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [4, -2])
-chitin_armour = Item("Chitin Armour", "LOREM IPSUM", [5, -1])
+iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [3, -2])
+steel_armour = Item("Steel Armour", "LOREM IPSUM", [4, -2])
 orcish_armour = Item("Orchish Armour", "LOREM IPSUM", [6, -3])
-ancient_nordic_armour = Item("Ancient Nordic Armour", "LOREM IPSUM", [8, -2])
+ancient_nordic_armour = Item("Ancient Nordic Armour", "LOREM IPSUM", [9, -3])
 
-loot_armour = [hide_armour, fur_armour, leather_armour, elven_armour, shrouded_armour, rusty_armour, iron_armour, chitin_armour, orcish_armour, ancient_nordic_armour, dragonscale_armour]
+loot_armour = [hide_armour, fur_armour, leather_armour, elven_armour, shrouded_armour, rusty_armour, iron_armour, steel_armour, orcish_armour, ancient_nordic_armour, dragonscale_armour]
 
 # (items, weapons, armour)
 loot_pool_0 = [lesser_health_potion, pebble, wooden_sword, iron_dagger, rusty_mace, hide_armour, rusty_armour] # player lvl. 1-2
-loot_pool_1 = [lesser_health_potion, rock, smoke_bomb, iron_sword, troll_club, fur_armour, iron_armour] # player lvl. 3-4
-loot_pool_2 = [health_potion, rock, smoke_bomb, steel_sword, steel_dagger, leather_armour, chitin_armour] # player lvl. 5-6
+loot_pool_1 = [lesser_health_potion, rock, iron_sword, troll_club, fur_armour, iron_armour] # player lvl. 3-4
+loot_pool_2 = [health_potion, smoke_bomb, steel_sword, steel_dagger, leather_armour, steel_armour] # player lvl. 5-6
 loot_pool_3 = [health_potion, smoke_bomb, elven_dagger, orcish_mace, elven_armour, orcish_armour] # player lvl. 7-8
-loot_pool_4 = [plentiful_health_potion, smoke_bomb, mage_scroll, ancient_nordic_shortsword, ancient_nordic_greatsword, shrouded_armour, ancient_nordic_armour] # player lvl. 9-10
-loot_pool_5 = [godify] # player lvl. 10+
+loot_pool_4 = [plentiful_health_potion, smoke_bomb, mage_scroll, ancient_nordic_shortsword, ancient_nordic_greatsword, shrouded_armour, ancient_nordic_armour] # player lvl. 9+
 
-inventory_items = [] # This list represents the player's inventory of usable items
+inventory_items = [pebble, rock, health_potion] # The player's inventory of usable items

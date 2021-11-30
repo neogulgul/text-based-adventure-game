@@ -1,10 +1,13 @@
+import math
 import os
-import sys
 import random
+import sys
 import time
-from classes import *
 from art import *
+from classes import *
 from text import *
+
+start_time = time.time()
 
 def clear_screen():
     os.system('cls')
@@ -19,7 +22,7 @@ def typing(message):
         else:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(random.choice([0.02, 0.04, 0.06, 0.08, 0.10]))
+            time.sleep(random.choice([0.02, 0.03, 0.04, 0.05]))
     time.sleep(1)
     print("")
 
@@ -31,6 +34,7 @@ def title_screen():
 def intro():
     clear_screen()
     typing(f"You are an adventurer on a quest to slay a dragon that has been terrorizing the lands.\nYou have however lost all your equipment to a group of pesky thieves whilst sleeping.\nHowever dire your situation may be you are determined to kill this dragon.")
+    time.sleep(3)
 
 def character_creation():
     global player
@@ -63,16 +67,16 @@ def character_creation():
 def adventure():
     while True:
         clear_screen()
-        choice = input('What do you want to do? [Explore/Inventory] (Type "-info" for further information) -> ').lower()
+        choice = input('What do you want to do? [1. Explore / 2. Inventory] (Type "-info" for further information) -> ').lower()
 
-        if choice == "explore":
+        if choice in ["explore", "1"]:
             if explore():
                 continue
 
             else: # THE PLAYER HAS DIED
                 break
 
-        elif choice == "inventory":
+        elif choice in ["inventory", "2"]:
             check_inventory()
             continue
 
@@ -82,6 +86,35 @@ def adventure():
 
             else: # THE PLAYER CHOSE TO QUIT THE GAME
                 break
+
+def explore():
+    rooms = [treasure] #[combat, combat, combat, trap, treasure, treasure, bonfire]
+
+    while True:
+        clear_screen()
+        direction = input("Which way do you go? [1. North / 2. West / 3. East] -> ").lower()
+
+        if direction in ["north", "1"]:
+            typing("You go north.")
+            random.choice(rooms)()
+            break
+
+        elif direction in ["west", "2"]:
+            typing("You go west.")
+            random.choice(rooms)()
+            break
+
+        elif direction in ["east", "3"]:
+            typing("You go east.")
+            random.choice(rooms)()
+            break
+    
+    if player.health <= 0:
+        typing(f"You have died. Game Over.")
+        return False
+
+    game_info.plus_room_count()
+    return True
 
 def check_inventory():
     if player.weapon != None:
@@ -167,7 +200,32 @@ def check_inventory():
 def info():
     while True:
         clear_screen()
-        print('''The goal of this game is to kill a dragon that has been terrorizing the lands.
+        play_time = math.floor(time.time() - start_time)
+
+        if play_time >= 3600:
+            hours = math.floor(play_time / 3600)
+            minutes = math.floor(play_time / 60) - hours * 60
+            seconds = math.floor(play_time) - hours * 3600 - minutes * 60
+            play_time = f"{hours} h {minutes} min {seconds} sec"
+
+        elif play_time >= 60:
+            minutes = math.floor(play_time / 60)
+            seconds = math.floor(play_time) - minutes * 60
+            play_time = f"{minutes} min {seconds} sec"
+
+        else:
+            play_time = f"{play_time} sec"
+
+        boss_1 = "???: ALIVE"
+        boss_2 = "???: ALIVE"
+
+        if ogre.alive == False:
+            boss_1 = "Ogre: DEAD"
+
+        if dragon.alive == False:
+            boss_2 = "Dragon: DEAD"
+
+        print(f'''The goal of this game is to kill a dragon that has been terrorizing the lands.
 If your HP goes below zero you die and lose all of your progress.
 
 If you are wondering what some of the stats mean, here is a list of them all.
@@ -187,9 +245,21 @@ If you are wondering what some of the stats mean, here is a list of them all.
     • SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
     If you both have an equal speed stat, then it is random who goes first.
     Can be influenced by both weapons and armour.
-    ''')
 
-        player_input = input('Type "-back" to go back or "-quit" to quit the game. (YOUR PROGRESS WILL NOT BE SAVED IF YOU CHOOSE TO QUIT) -> ').lower()
+Rooms Visited: {game_info.room_count}
+Enemies Defeated: {game_info.enemy_count}
+Play Time: {play_time}
+
+Bosses:
+‾‾‾‾‾‾‾
+{boss_1}
+{boss_2}
+
+PRO TIP: It is faster to type only the number infront of a given input (if it has one) instead of the whole word.
+This does not work for commands such as "-back" for example, inputs with a dash (-) in front.
+''')
+
+        player_input = input('Type "-back" to go back or "-quit" to quit the game. -> ').lower()
 
         if player_input == "-back":
             return True
@@ -197,25 +267,7 @@ If you are wondering what some of the stats mean, here is a list of them all.
         elif player_input == "-quit":
             return False
 
-def explore():
-    while True:
-        clear_screen()
-        direction = input("Which way do you go? [North/West/East] -> ").lower()
-
-        if direction in ["north", "west", "east"]:
-            typing(f"You go {direction}.")
-            random.choice([combat, combat, combat, trap, treasure, treasure, bonfire])()
-            break
-    
-    if player.health <= 0:
-        typing(f"You have died. Game Over.")
-        return False
-
-    return True
-
 def combat():
-    clear_screen()
-
     battle = True
 
     player_HP = player.health
@@ -230,16 +282,18 @@ def combat():
         enemy = dragon
 
     else:
-        if player.level == 10:
-            enemy = random.choice(enemies_list_5)
-        elif player.level > 8:
+        if player.level > 8:
             enemy = random.choice(enemies_list_4)
+
         elif player.level > 6:
             enemy = random.choice(enemies_list_3)
+
         elif player.level > 4:
             enemy = random.choice(enemies_list_2)
+
         elif player.level > 2:
             enemy = random.choice(enemies_list_1)
+
         else:
             enemy = random.choice(enemies_list_0)
 
@@ -273,22 +327,23 @@ def combat():
         else:
             enemy_action = random.choice(["attack", "attack", "attack", "defend"])
 
-        player_action = input("What do you choose to do? [Attack/Defend/Item] -> ").lower()
+        player_action = input("What do you choose to do? [1. Attack / 2. Defend / 3. Item] -> ").lower()
 
-        if player_action not in ["attack", "defend", "item"]:
+        if player_action not in ["attack", "defend", "item", "1", "2", "3"]:
             continue
 
-        elif player_action == "defend" and player_DEF == 0:
+        elif player_action in ["defend", "2"] and player_DEF == 0:
             typing("You have 0 defence and therefore can not defend.")
             continue
 
-        elif player_action == "item":
+        elif player_action in ["item", "3"]:
             if len(inventory_items) == 0:
                 typing("You have no items.")
                 continue
             
             else:
                 while True:
+                    clear_screen()
                     item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "-back" to go back) -> ').lower()
                     if item_chosen == "-back":
                         break
@@ -296,6 +351,15 @@ def combat():
                     for item in inventory_items:
                         if item.name.lower() == item_chosen:
                             item_chosen = item
+
+                    if item_chosen == "3" and len(inventory_items) == 3:
+                        item_chosen = inventory_items[2]
+
+                    elif item_chosen == "2" and len(inventory_items) >= 2:
+                        item_chosen = inventory_items[1]
+
+                    elif item_chosen == "1":
+                        item_chosen = inventory_items[0]
 
                     if item_chosen not in inventory_items:
                         continue
@@ -327,17 +391,6 @@ def combat():
                         typing("You throw the smoke bomb on the ground and flee from battle.")
                         battle = False
 
-                    elif item_chosen == godify:
-                        player.health = 999
-                        player.max_health = 999
-                        player.attack = 999
-                        player.defence = 999
-                        player.speed = 999
-
-                        typing(f"In an instant you transform into a God and the enemy runs away in fear and disbelief.")
-
-                        battle = False
-
                     inventory_items.remove(item_chosen)
                     break
 
@@ -347,11 +400,11 @@ def combat():
         if battle == False:
             break
 
-        if player_action == "defend" and enemy_action == "defend":
+        if player_action in ["defend", "2"] and enemy_action == "defend":
             typing("You both chose to defend and nothing happened.")
             continue
 
-        if player_action == "defend":
+        if player_action in ["defend", "2"]:
             typing("You chose to defend.")
 
         if enemy_action == "defend":
@@ -405,6 +458,7 @@ def combat():
         typing(f"{player.name} has been slain by the {enemy.name}.")
 
     elif enemy_HP <= 0:
+        game_info.plus_enemy_count()
         typing(f"You have slain the {enemy.name}.")
         if type(enemy) == Boss:
             enemy.alive = False
@@ -431,7 +485,7 @@ def combat():
     player.set_health(player_HP)
 
 def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
-    if player_action == "attack":
+    if player_action in ["attack", "1"]:
         hit = random.randint(1, 5)
         if hit == 1:
             typing("You missed.")
@@ -467,7 +521,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
             typing(f"The {enemy_name} missed whilst performing an attack.")
 
         else:
-            if player_action == "defend":
+            if player_action in ["defend", "2"]:
                 success = random.randint(1, 4)
                 if success == 1:
                     dmg = enemy_ATK
@@ -503,6 +557,15 @@ def see_inventory_items():
     see_inventory_items = []
     for item in inventory_items:
         see_inventory_items.append(item.name)
+    
+    if len(see_inventory_items) == 3:
+        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]} / 3. {see_inventory_items[2]}]"
+
+    elif len(see_inventory_items) == 2:
+        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]}]"
+
+    else:
+        see_inventory_items = f"[1. {see_inventory_items[0]}]"
 
     return see_inventory_items
 
@@ -518,24 +581,24 @@ def level_up():
     SPD: {player.speed}
 ''')
 
-        attribute = input(f"Which attribute do you want to increase? [HP/ATK/DEF/SPD] -> ").upper()
+        attribute = input(f"Which attribute do you want to increase? [1. HP / 2. ATK / 3. DEF / 4. SPD] -> ").upper()
 
-        if attribute == "HP":
+        if attribute in ["HP", "1"]:
             player.max_health += 5
             typing("Your max HP increased by 5 points.")
             break
 
-        elif attribute == "ATK":
+        elif attribute in ["ATK", "2"]:
             player.attack += 1
             typing("Your ATK increased by 1 point.")
             break
 
-        elif attribute == "DEF":
+        elif attribute in ["DEF", "3"]:
             player.defence += 1
             typing("Your DEF increased by 1 point.")
             break
 
-        elif attribute == "SPD":
+        elif attribute in ["SPD", "4"]:
             player.speed += 1
             typing("Your SPD increased by 1 point.")
             break
@@ -552,10 +615,7 @@ def treasure():
     clear_screen()
     typing("You find a treasure chest! Let us take a look at what is inside.")
 
-    if player.level > 10:
-        loot = random.choice(loot_pool_5)
-
-    elif player.level > 8:
+    if player.level > 8:
         loot = random.choice(loot_pool_4)
 
     elif player.level > 6:
@@ -571,24 +631,23 @@ def treasure():
         loot = random.choice(loot_pool_0)
 
     if loot in loot_items:
-        typing(f"You find a {loot.name}. {loot.description}")
+        typing(f"You found a {loot.name}. {loot.description}")
         add_to_items(loot)
 
     elif loot in loot_weapons:
-        typing(f"You find a {loot.name}. {loot.description}")
+        typing(f"You found a {loot.name}. {loot.description}")
         equip(loot)
 
     elif loot in loot_armour:
-        typing(f"You find {loot.name}. {loot.description}")
+        typing(f"You found {loot.name}. {loot.description}")
         equip(loot)
 
 def add_to_items(loot):
-    clear_screen()
     if len(inventory_items) >= 3:
-        typing(f"Your pockets are full, you would have to throw something away if you want to keep {loot.name}.")
+        typing(f"Your pockets are full, you would have to throw something away if you want to keep the {loot.name}.")
         while True:
             clear_screen()
-            throw_or_keep = input(f"Do you want to throw something away and keep {loot.name}? [Y/N] -> ").lower()
+            throw_or_keep = input(f"Do you want to throw something away and keep the {loot.name}? [Y/N] -> ").lower()
 
             if throw_or_keep == "y":
                 while True:
@@ -601,7 +660,17 @@ def add_to_items(loot):
                         if item.name.lower() == discard:
                             discard = item
 
+                    if discard == "3" and len(inventory_items) == 3:
+                        discard = inventory_items[2]
+
+                    elif discard == "2" and len(inventory_items) >= 2:
+                        discard = inventory_items[1]
+
+                    elif discard == "1":
+                        discard = inventory_items[0]
+
                     if discard in inventory_items:
+                        typing(f"You threw away your {discard.name} and kept the {loot.name}.")
                         inventory_items.remove(discard)
                         inventory_items.append(loot)
                         break
