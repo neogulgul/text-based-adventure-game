@@ -112,12 +112,12 @@ steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [4,
 butter_knife = Item("Butter Knife", "Makes the best buttered bread.", [0, 3])
 iron_dagger = Item("Iron Dagger", "Makes stabbing great.", [1, 1])
 steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [2, 2])
-elven_dagger = Item("Elven Dagger", "LOREM IPSUM", [3, 4])
-rusty_mace = Item("Rusty Mace", "LOREM IPSUM", [2, -2])
+elven_dagger = Item("Elven Dagger", "Made for elven assasins", [3, 4])
+rusty_mace = Item("Rusty Mace", "It could use a bit of sharpening", [2, -2])
 troll_club = Item("Troll Club", "It reeks of troll.", [3, -1])
 orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [5, -2])
-ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [5, 1])
-ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [7, -3])
+ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "Seems quite powerful.", [5, 1])
+ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "That's a big sword.", [7, -3])
 
 loot_weapons = [wooden_sword, iron_sword, steel_sword, butter_knife, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
 
