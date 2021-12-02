@@ -212,7 +212,7 @@ If your HP goes below zero you die and lose all of your progress.
 
 If you are wondering what some of the stats mean, here is a list of them all.
 
-    • LV (Level) - After leveling up you get to choose one stat of yours to increase.
+    • LV (Level) - After leveling up you get to choose one stat of yours to increase. Your health is also restored to full.
 
     • EXP (Experience Points) - Your character's experience points determine how close you are to leveling up.
 
@@ -222,6 +222,7 @@ If you are wondering what some of the stats mean, here is a list of them all.
     Can be influenced by weapons.
 
     • DEF (Defence) - This stat determines how well you can defend against enemy attacks.
+    For every 3 of your defence points an enemy attack is reduced by 1 point, unless you defend successfully - then the attack is reduced by 1 point for each one of your defence points.
     Can be influenced by armour.
 
     • SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
@@ -475,7 +476,7 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
 
         else:
             crit = ""
-            dmg = player_ATK
+            dmg = player_ATK - math.floor(enemy_DEF / 3)
             if hit == 10:
                 crit = "A critical hit! "
                 dmg = player_ATK * 2
@@ -486,7 +487,7 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
                     helper.typing(f"{crit}The {enemy_name} failed in defending against your attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                     enemy_HP -= dmg
 
-                else: # If the enemy succesfully defends then the player can not deal critical damage
+                else: # If the enemy successfully defends then the player can not deal critical damage
                     dmg = player_ATK - enemy_DEF
                     if dmg <= 0:
                         helper.typing(f"The {enemy_name} successfully defended against your attack and took 0 points of damage.")
@@ -509,7 +510,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
 
         else:
             crit = ""
-            dmg = enemy_ATK
+            dmg = enemy_ATK - math.floor(player_DEF / 3)
             if hit == 10:
                 crit = "A critical hit! "
                 dmg = enemy_ATK * 2
@@ -520,7 +521,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
                     helper.typing(f"{crit}You failed in defending against the {enemy_name} attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                     player_HP - dmg
 
-                else: # If the player succesfully defends then the enemy can not deal critical damage
+                else: # If the player successfully defends then the enemy can not deal critical damage
                     dmg = enemy_ATK - player_DEF
                     if dmg <= 0:
                         helper.typing(f"You successfully defended against the enemy attack and took 0 points of damage.")
