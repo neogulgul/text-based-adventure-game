@@ -6,8 +6,6 @@ from art import *
 from classes import *
 from text import *
 import helper
-import combat
-import treasure
 
 start_time = time.time()
 
@@ -328,7 +326,7 @@ def combat():
             else:
                 while True:
                     helper.clear_screen()
-                    item_chosen = input(f'What item do you want to use? {combat.see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "back" to go back) -> ').lower()
                     if item_chosen == "back":
                         break
 
@@ -395,22 +393,22 @@ def combat():
             helper.typing(f"The {enemy.name} chose to defend.")
 
         if type(enemy) == Boss or player_SPD > enemy_SPD:
-            enemy_HP = combat.player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
+            enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
             if enemy_HP <= 0:
                 battle = False
             
             else:
-                player_HP = combat.enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
+                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
                     battle = False
 
         elif player_SPD < enemy_SPD:
-            player_HP = combat.enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
+            player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
             if player_HP <= 0:
                 battle = False
             
             else:
-                enemy_HP = combat.player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
+                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
                     battle = False
 
@@ -418,22 +416,22 @@ def combat():
             who_goes_first = random.choice(["player", "enemy"])
 
             if who_goes_first == "player":
-                enemy_HP = combat.player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
+                enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
                     battle = False
                 
                 else:
-                    player_HP = combat.enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
+                    player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                     if player_HP <= 0:
                         battle = False
 
             elif who_goes_first == "enemy":
-                player_HP = combat.enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
+                player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
                     battle = False
                 
                 else:
-                    enemy_HP = combat.player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
+                    enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                     if enemy_HP <= 0:
                         battle = False
 
@@ -447,7 +445,7 @@ def combat():
             enemy.alive = False
             loot = enemy.drop
             helper.typing(f"The {enemy.name} dropped {loot.name}. {loot.description}")
-            treasure.equip(loot)
+            equip(loot)
 
             if enemy == dragon:
                 helper.typing("With the dragon now defeated peace will slowly start to return to the lands. However, there will still be enemies left for you to defeat.")
@@ -461,10 +459,120 @@ def combat():
                 player.experience -= level_up_exp
                 player.level += 1
                 helper.typing(f"You leveled up! You are now level {player.level}.")
-                combat.level_up()
+                level_up()
                 player_HP = player.max_health
 
     player.set_health(player_HP)
+
+def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
+    if player_action in ["attack", "1"]:
+        hit = random.randint(1, 5)
+        if hit == 1:
+            helper.typing("You missed.")
+        
+        else:
+            if enemy_action == "defend":
+                success = random.randint(1, 4)
+                if success == 1:
+                    dmg = player_ATK
+                    helper.typing(f"The {enemy_name} failed in defending against your attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                    enemy_HP -= dmg
+                
+                else:
+                    dmg = player_ATK - enemy_DEF
+                    if dmg <= 0:
+                        helper.typing(f"The {enemy_name} successfully defended against your attack and took 0 points of damage.")
+
+                    else:
+                        helper.typing(f"The {enemy_name} successfully defended against your attack and only took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                        enemy_HP -= dmg
+
+            else:
+                dmg = player_ATK
+                helper.typing(f"You hit the {enemy_name} for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                enemy_HP -= dmg
+
+    return enemy_HP
+
+def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK):
+    if enemy_action == "attack":
+        hit = random.randint(1, 5)
+        if hit == 1:
+            helper.typing(f"The {enemy_name} missed whilst performing an attack.")
+
+        else:
+            if player_action in ["defend", "2"]:
+                success = random.randint(1, 4)
+                if success == 1:
+                    dmg = enemy_ATK
+                    helper.typing(f"You failed in defending against the {enemy_name} attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                    player_HP - dmg
+
+                else:
+                    dmg = enemy_ATK - player_DEF
+                    if dmg <= 0:
+                        helper.typing(f"You successfully defended against the enemy attack and took 0 points of damage.")
+                    
+                    else:
+                        (f"You successfully defended against the enemy attack and only took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                        player_HP -= dmg
+
+            else:
+                dmg = enemy_ATK
+                helper.typing(f"The {enemy_name} hit you for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                player_HP -= dmg
+
+    return player_HP
+
+def see_inventory_items():
+    see_inventory_items = []
+    for item in inventory_items:
+        see_inventory_items.append(item.name)
+    
+    if len(see_inventory_items) == 3:
+        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]} / 3. {see_inventory_items[2]}]"
+
+    elif len(see_inventory_items) == 2:
+        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]}]"
+
+    else:
+        see_inventory_items = f"[1. {see_inventory_items[0]}]"
+
+    return see_inventory_items
+
+def level_up():
+    while True:
+        helper.clear_screen()
+
+        print(f'''You get to choose one stat of yours to increase.
+
+    HP: {player.health}/{player.max_health}
+    ATK: {player.attack}
+    DEF: {player.defence}
+    SPD: {player.speed}
+''')
+
+        attribute = input(f"Which attribute do you want to increase? [1. HP / 2. ATK / 3. DEF / 4. SPD] -> ").upper()
+
+        if attribute in ["HP", "1"]:
+            player.max_health += 5
+            helper.typing("Your max HP increased by 5 points.")
+            break
+
+        elif attribute in ["ATK", "2"]:
+            player.attack += 1
+            helper.typing("Your ATK increased by 1 point.")
+            break
+
+        elif attribute in ["DEF", "3"]:
+            player.defence += 1
+            helper.typing("Your DEF increased by 1 point.")
+            break
+
+        elif attribute in ["SPD", "4"]:
+            player.speed += 1
+            helper.typing("Your SPD increased by 1 point.")
+            break
 
 def trap():
     helper.clear_screen()
@@ -472,6 +580,101 @@ def trap():
     dmg = random.randint(1, 2)
     player.health -= dmg
     helper.typing(f"You take {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+
+def add_to_items(loot): #efter trap innan treasure?
+    if len(inventory_items) >= 3:
+        helper.typing(f"Your pockets are full, you would have to throw something away if you want to keep the {loot.name}.")
+        while True:
+            helper.clear_screen()
+            throw_or_keep = input(f"Do you want to throw something away and keep the {loot.name}? [Y/N] -> ").lower()
+
+            if throw_or_keep == "y":
+                while True:
+                    helper.clear_screen()
+                    discard = input(f'What do you want to throw away? {see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    if discard == "back":
+                        break
+
+                    for item in inventory_items:
+                        if item.name.lower() == discard:
+                            discard = item
+
+                    if discard == "3" and len(inventory_items) == 3:
+                        discard = inventory_items[2]
+
+                    elif discard == "2" and len(inventory_items) >= 2:
+                        discard = inventory_items[1]
+
+                    elif discard == "1":
+                        discard = inventory_items[0]
+
+                    if discard in inventory_items:
+                        helper.typing(f"You threw away your {discard.name} and kept the {loot.name}.")
+                        inventory_items.remove(discard)
+                        inventory_items.append(loot)
+                        break
+
+                if discard == "back":
+                    continue
+
+                break
+
+            elif throw_or_keep == "n":
+                helper.typing(f"You threw away the {loot.name}.")
+                break
+
+    else:
+        helper.typing(f"You put the {loot.name} in your pocket.")
+        inventory_items.append(loot)
+
+def equip(loot):
+    if loot in loot_weapons:
+        if player.weapon == None:
+            player.weapon = loot.name
+            player.weapon_stat = loot.use
+            helper.typing(f"You equip the {loot.name}.")
+
+        else:
+            if player.weapon == loot.name:
+                helper.typing(f"You already have {helper.a_or_an(loot.name)} {loot.name} equipped, so you decide to leave it behind.")
+
+            else:
+                while True:
+                    helper.clear_screen()
+                    change_or_keep = input(f"Do you want to switch from your {player.weapon} [ATK: {player.weapon_stat[0]}, SPD: {player.weapon_stat[1]}] to the {loot.name} [ATK: {loot.use[0]}, SPD: {loot.use[1]}]? [Y/N] -> ").lower()
+                    if change_or_keep == "y":
+                        helper.typing(f"You decide to leave your {player.weapon} behind and switch to {helper.a_or_an(loot.name)} {loot.name}.")
+                        player.weapon = loot.name
+                        player.weapon_stat = loot.use
+                        break
+
+                    elif change_or_keep == "n":
+                        helper.typing(f"You decide to keep your {player.weapon}.")
+                        break
+
+    elif loot in loot_armour:
+        if player.armour == None:
+            player.armour = loot.name
+            player.armour_stat = loot.use
+            helper.typing(f"You equip the {loot.name}.")
+
+        else:
+            if player.armour == loot.name:
+                helper.typing(f"You already have {loot.name} equipped, so you decide to leave it behind.")
+
+            else:
+                while True:
+                    helper.clear_screen()
+                    change_or_keep = input(f"Do you want to change from your {player.armour} [DEF: {player.armour_stat[0]}, SPD: {player.armour_stat[1]}] to {loot.name} [DEF: {loot.use[0]}, SPD: {loot.use[1]}]? [Y/N] -> ").lower()
+                    if change_or_keep == "y":
+                        helper.typing(f"You decide to leave your {player.armour} behind and switch to {loot.name}.")
+                        player.armour = loot.name
+                        player.armour_stat = loot.use
+                        break
+
+                    elif change_or_keep == "n":
+                        helper.typing(f"You decide to keep your {player.armour}.")
+                        break
 
 def treasure():
     helper.clear_screen()
@@ -494,15 +697,15 @@ def treasure():
 
     if loot in loot_items:
         helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
-        treasure.add_to_items(loot)
+        add_to_items(loot)
 
     elif loot in loot_weapons:
         helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
-        treasure.equip(loot)
+        equip(loot)
 
     elif loot in loot_armour:
         helper.typing(f"You found {loot.name}. {loot.description}")
-        treasure.equip(loot)
+        equip(loot)
 
 def bonfire():
     while True:
