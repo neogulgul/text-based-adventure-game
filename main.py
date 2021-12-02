@@ -65,7 +65,6 @@ def character_creation():
             print("ERROR: ", end = "", flush = True)
             typing("Only letters from the alphabet are allowed, and no more than 20 characters long.")
 
-    
     player_health = 10
     player_attack = 1
     player_defence = 0
