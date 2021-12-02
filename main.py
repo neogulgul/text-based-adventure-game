@@ -405,7 +405,7 @@ def combat():
                     battle = False
 
         elif player_SPD < enemy_SPD:
-            player_HP = combat.venemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
+            player_HP = combat.enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
             if player_HP <= 0:
                 battle = False
             
