@@ -222,7 +222,8 @@ If you are wondering what some of the stats mean, here is a list of them all.
     Can be influenced by weapons.
 
     • DEF (Defence) - This stat determines how well you can defend against enemy attacks.
-    For every 3 of your defence points an enemy attack is reduced by 1 point, unless you defend successfully - then the attack is reduced by 1 point for each one of your defence points.
+    For every 3 of your defence points an enemy attack is reduced by 1 point, unless you defend successfully where the attack is reduced by 1 point for each one of your defence points.
+    Critical hits negate all defence.
     Can be influenced by armour.
 
     • SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
@@ -594,8 +595,8 @@ def trap():
     helper.typing(f"You take {dmg} point{helper.s_or_no_s(dmg)} of damage.")
 
 def treasure():
-    helper.clear_screen()
     helper.typing("You find a treasure chest! Let us take a look at what is inside.")
+    helper.clear_screen()
 
     if player.level > 8:
         loot = random.choice(loot_pool_4)
