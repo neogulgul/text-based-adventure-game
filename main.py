@@ -593,6 +593,7 @@ def trap():
     helper.typing(f"You take {dmg} point{helper.s_or_no_s(dmg)} of damage.")
 
 def treasure():
+    helper.clear_screen()
     helper.typing("You find a treasure chest! Let us take a look at what is inside.")
 
     if player.level > 8:
@@ -619,7 +620,7 @@ def treasure():
         equip(loot)
 
     elif loot in loot_armour:
-        helper.typing(f"You found a set of {loot.name}. {loot.description}")
+        helper.typing(f"You found {loot.name}. {loot.description}")
         equip(loot)
 
 def add_to_items(loot):
