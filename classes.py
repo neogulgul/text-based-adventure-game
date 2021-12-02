@@ -1,4 +1,4 @@
-from art import *
+import art
 
 class Player:
     def __init__(self, name, HP, ATK, DEF, SPD):
@@ -58,24 +58,34 @@ game_info = Game_Info()
 '''
 Enemy creation with the use of the Enemy class and defining attributes for each unique enemy.
 
-enemy = Enemy(name, health, attack, defence, speed, experience)
+enemy = Enemy(name, health, attack, defence, speed)
 '''
 green_slime = Enemy("Green Slime", 3, 1, 0, 10)
 gnome = Enemy("Gnome", 2, 1, 0, 12)
-goblin = Enemy("Goblin", 6, 2, 1, 8)
-skeleton = Enemy("Skeleton", 4, 2, 2, 8)
-red_slime = Enemy("Red Slime", 9, 3, 0, 10)
-golem = Enemy("Golem", 10, 0, 0, 8)
-treant = Enemy("Treant", 10, 0, 0, 8)
-draugr = Enemy("Draugr", 10, 0, 0, 8)
-blue_slime = Enemy("Blue Slime", 15, 0, 0, 10)
-troll = Enemy("Troll", 10, 0, 0, 8)
+rat = Enemy("Rat", 2, 1, 0, 11)
 
-enemies_list_0 = [green_slime, gnome] # player lvl. 1-2
-enemies_list_1 = [goblin, skeleton] # player lvl. 3-4
-enemies_list_2 = [red_slime, golem] # player lvl. 5-6
-enemies_list_3 = [treant, draugr] # player lvl. 7-8
-enemies_list_4 = [blue_slime, troll] # player lvl. 9+
+red_slime = Enemy("Red Slime", 6, 1, 0, 10)
+goblin = Enemy("Goblin", 7, 2, 1, 8)
+skeleton = Enemy("Skeleton", 6, 2, 2, 8)
+
+blue_slime = Enemy("Blue Slime", 9, 2, 0, 10)
+golem = Enemy("Golem", 10, 3, 5, 8)
+mimic = Enemy("Mimic", 6, 3, 3, 12)
+
+draugr = Enemy("Draugr", 12, 3, 2, 8)
+hobgoblin = Enemy("Hobgoblin", 14, 4, 2, 9)
+phoenix = Enemy("Phoenix", 10, 3, 0, 15)
+
+baby_dragon = Enemy("Baby Dragon", 15, 4, 1, 10)
+troll = Enemy("Troll", 18, 4, 4, 7)
+wraith = Enemy("Wraith", 12, 4, 0, 14)
+
+
+enemies_list_0 = [green_slime, gnome, rat] # player lvl. 1-2
+enemies_list_1 = [red_slime, goblin, skeleton] # player lvl. 3-4
+enemies_list_2 = [blue_slime, golem, mimic] # player lvl. 5-6
+enemies_list_3 = [draugr, hobgoblin, phoenix] # player lvl. 7-8
+enemies_list_4 = [baby_dragon, troll, wraith] # player lvl. 9+
 
 '''
 Boss creation with the use of the Boss class and defining attrbiutes for each unique boss.
@@ -83,11 +93,11 @@ Boss creation with the use of the Boss class and defining attrbiutes for each un
 boss = Boss(name, health, attack, defence, item drop, ascii art)
 '''
 # Boss Drops (special items that can only be dropped by bosses)
-ogre_hammer = Item("Ogre Hammer", "A heavy hammer wielded by ogres.", [5, -3]) # Weapon
-dragonscale_armour = Item("Dragonscale Armour", "Crafted with the scales from a dragon.", [10, 0]) # Armour
+ogre_hammer = Item("Ogre Hammer", "A heavy hammer wielded by most ogres.", [5, -3]) # Weapon
+dragonscale_armour = Item("Dragonscale Armour", "Crafted with scales from a dragon.", [10, 0]) # Armour
 
-ogre = Boss("Ogre", 30, 3, 6, ogre_hammer, OGRE) # First Boss (after player reaches lvl 5)
-dragon = Boss("Dragon", 80, 5, 20, dragonscale_armour, DRAGON) # Last Boss (after player reaches lvl 10)
+ogre = Boss("Ogre", 35, 3, 6, ogre_hammer, art.OGRE) # First Boss (after player reaches lvl 5)
+dragon = Boss("Dragon", 75, 5, 15, dragonscale_armour, art.DRAGON) # Last Boss (after player reaches lvl 10)
 
 '''
 Item creation with the use of the Item class and defining attributes for each unique item.
@@ -109,31 +119,31 @@ loot_items = [lesser_health_potion, health_potion, plentiful_health_potion, pebb
 wooden_sword = Item("Wooden Sword", "Better than a stick.", [1, 0])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [2, 0])
 steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [4, 0])
-butter_knife = Item("Butter Knife", "Makes the best buttered bread.", [0, 3])
-iron_dagger = Item("Iron Dagger", "Makes stabbing great.", [1, 1])
+butter_knife = Item("Butter Knife", "Great for making buttered toast.", [0, 3])
+iron_dagger = Item("Iron Dagger", "Makes stabbing feel great.", [1, 1])
 steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [2, 2])
-elven_dagger = Item("Elven Dagger", "Made for elven assasins", [3, 4])
-rusty_mace = Item("Rusty Mace", "It could use a bit of sharpening", [2, -2])
+elven_dagger = Item("Elven Dagger", "Smithed by the elves.", [3, 4])
+rusty_mace = Item("Rusty Mace", "One mans trash is another mans... weapon?", [2, -2])
 troll_club = Item("Troll Club", "It reeks of troll.", [3, -1])
 orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [5, -2])
-ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "Seems quite powerful.", [5, 1])
-ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "That's a big sword.", [7, -3])
+ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "Do not let its size fool you.", [5, 1])
+ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "Now this, is a big sword.", [7, -3])
 
 loot_weapons = [wooden_sword, iron_sword, steel_sword, butter_knife, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
 
 # Armour - armour = Item(name, description, [defence, speed])
 # "light armour"
 hide_armour = Item("Hide Armour", "Looks like deer, smells like deer.", [1, 0])
-fur_armour = Item("Fur Armour", "Warm armour, great against the northern cold.", [2, 0])
-leather_armour = Item("Leather Armour", "Tough leathery armor.", [3, 0])
-elven_armour = Item("Elven Armour", "Light armor that provides great speed.", [4, 2])
-shrouded_armour = Item("Shrouded Armour", "This armour worn by the Dark Brotherhood.", [5, 4])
+fur_armour = Item("Fur Armour", "Great against the northern cold.", [2, 0])
+leather_armour = Item("Leather Armour", "Tough leathery armour.", [3, 0])
+elven_armour = Item("Elven Armour", "A light set of armour that provides great mobility.", [4, 2])
+shrouded_armour = Item("Shrouded Armour", "Worn by a notorious group of assasins.", [5, 4])
 # "heavy armour"
 rusty_armour = Item("Rusty Armour", "This armour has seen better days.", [2, -2])
 iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [3, -2])
-steel_armour = Item("Steel Armour", "Forged in the mountains by dwarfs.", [4, -2])
+steel_armour = Item("Steel Armour", "The prefered set of armour for knights.", [4, -2])
 orcish_armour = Item("Orchish Armour", "Smells like orc.", [6, -3])
-ancient_nordic_armour = Item("Ancient Nordic Armour", "This cold frozen armour was thought to be a myth.", [8, -2])
+ancient_nordic_armour = Item("Ancient Nordic Armour", "This armour set was long thought to be a myth.", [8, -2])
 
 loot_armour = [hide_armour, fur_armour, leather_armour, elven_armour, shrouded_armour, rusty_armour, iron_armour, steel_armour, orcish_armour, ancient_nordic_armour, dragonscale_armour]
 

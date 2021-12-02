@@ -1,17 +1,15 @@
 import math
-import os
 import random
 import time
-from art import *
 from classes import *
-from text import *
 import helper
+import text
 
 start_time = time.time()
 
 def title_screen():
     helper.clear_screen()
-    print(TITLE)
+    print(art.TITLE)
     time.sleep(3)
 
 def intro():
@@ -77,20 +75,20 @@ def explore():
         direction = input("Which way do you go? [1. North / 2. West / 3. East] -> ").lower()
 
         if direction in ["north", "1"]:
-            helper.typing(f"You go north. {random.choice(travel_messages)}")
+            helper.typing(f"You go north.")
             random.choice(rooms)()
             break
 
         elif direction in ["west", "2"]:
-            helper.typing(f"You go west. {random.choice(travel_messages)}")
+            helper.typing(f"You go west.")
             random.choice(rooms)()
             break
 
         elif direction in ["east", "3"]:
-            helper.typing(f"You go east. {random.choice(travel_messages)}")
+            helper.typing(f"You go east.")
             random.choice(rooms)()
             break
-    
+
     if player.health <= 0:
         helper.typing(f"You have died. Game Over.")
         helper.typing(f"In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
@@ -111,7 +109,7 @@ def check_inventory():
 
     else:
         DEF_buff = ""
-    
+
     if player.weapon_stat[1] == 0 and player.armour_stat[1] == 0:
         SPD_buff = ""
 
@@ -141,7 +139,7 @@ def check_inventory():
     if player.level == 10:
         player.experience = "MAX"
         level_up_exp = "MAX"
-    
+
     if len(inventory_items) == 3:
         item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
 
@@ -183,6 +181,7 @@ def check_inventory():
 def info():
     while True:
         helper.clear_screen()
+
         play_time = math.floor(time.time() - start_time)
 
         if play_time >= 3600:
@@ -293,6 +292,8 @@ def combat():
         helper.typing("You encounter the Dragon!")
 
     else:
+        if enemy == mimic:
+            helper.typing("You find a treasure chest! Let us take a look... wait. Wah! *The treasure chest lunges towards you.*")
         helper.typing(f"You encounter {helper.a_or_an(enemy.name)} {enemy.name}.")
 
     while battle:
@@ -322,7 +323,7 @@ def combat():
             if len(inventory_items) == 0:
                 helper.typing("You have no items.")
                 continue
-            
+
             else:
                 while True:
                     helper.clear_screen()
@@ -396,7 +397,7 @@ def combat():
             enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
             if enemy_HP <= 0:
                 battle = False
-            
+
             else:
                 player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
@@ -406,7 +407,7 @@ def combat():
             player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
             if player_HP <= 0:
                 battle = False
-            
+
             else:
                 enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
@@ -419,7 +420,7 @@ def combat():
                 enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                 if enemy_HP <= 0:
                     battle = False
-                
+
                 else:
                     player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                     if player_HP <= 0:
@@ -429,7 +430,7 @@ def combat():
                 player_HP = enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy.name, enemy_ATK)
                 if player_HP <= 0:
                     battle = False
-                
+
                 else:
                     enemy_HP = player_attack(player_action, player_ATK, enemy_action, enemy.name, enemy_HP, enemy_DEF)
                     if enemy_HP <= 0:
@@ -441,6 +442,7 @@ def combat():
     elif enemy_HP <= 0:
         game_info.plus_enemy_count()
         helper.typing(f"You have slain the {enemy.name}.")
+
         if type(enemy) == Boss:
             enemy.alive = False
             loot = enemy.drop
@@ -449,7 +451,8 @@ def combat():
 
             if enemy == dragon:
                 helper.typing("With the dragon now defeated peace will slowly start to return to the lands. However, there will still be enemies left for you to defeat.")
-                helper.typing("The game is now pretty much over. There are however some new enemies for you to discover. Thank you so much for playing! :-)")
+                helper.clear_screen()
+                helper.typing("The game is now pretty much over. Thank you for playing! :-)")
 
         elif type(enemy) != Boss and player.level != 10:
             level_up_exp = player.level * 100
@@ -466,19 +469,24 @@ def combat():
 
 def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
     if player_action in ["attack", "1"]:
-        hit = random.randint(1, 5)
-        if hit == 1:
+        hit = random.randint(1, 10)
+        if hit <= 2:
             helper.typing("You missed.")
-        
+
         else:
+            crit = ""
+            dmg = player_ATK
+            if hit == 10:
+                crit = "A critical hit! "
+                dmg = player_ATK * 2
+
             if enemy_action == "defend":
                 success = random.randint(1, 4)
                 if success == 1:
-                    dmg = player_ATK
-                    helper.typing(f"The {enemy_name} failed in defending against your attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                    helper.typing(f"{crit}The {enemy_name} failed in defending against your attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                     enemy_HP -= dmg
-                
-                else:
+
+                else: # If the enemy succesfully defends then the player can not deal critical damage
                     dmg = player_ATK - enemy_DEF
                     if dmg <= 0:
                         helper.typing(f"The {enemy_name} successfully defended against your attack and took 0 points of damage.")
@@ -488,38 +496,41 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
                         enemy_HP -= dmg
 
             else:
-                dmg = player_ATK
-                helper.typing(f"You hit the {enemy_name} for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                helper.typing(f"{crit}You hit the {enemy_name} for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                 enemy_HP -= dmg
 
     return enemy_HP
 
 def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name, enemy_ATK):
     if enemy_action == "attack":
-        hit = random.randint(1, 5)
-        if hit == 1:
+        hit = random.randint(1, 10)
+        if hit <= 2:
             helper.typing(f"The {enemy_name} missed whilst performing an attack.")
 
         else:
+            crit = ""
+            dmg = enemy_ATK
+            if hit == 10:
+                crit = "A critical hit! "
+                dmg = enemy_ATK * 2
+
             if player_action in ["defend", "2"]:
                 success = random.randint(1, 4)
                 if success == 1:
-                    dmg = enemy_ATK
-                    helper.typing(f"You failed in defending against the {enemy_name} attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                    helper.typing(f"{crit}You failed in defending against the {enemy_name} attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                     player_HP - dmg
 
-                else:
+                else: # If the player succesfully defends then the enemy can not deal critical damage
                     dmg = enemy_ATK - player_DEF
                     if dmg <= 0:
                         helper.typing(f"You successfully defended against the enemy attack and took 0 points of damage.")
-                    
+
                     else:
                         (f"You successfully defended against the enemy attack and only took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                         player_HP -= dmg
 
             else:
-                dmg = enemy_ATK
-                helper.typing(f"The {enemy_name} hit you for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                helper.typing(f"{crit}The {enemy_name} hit you for {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                 player_HP -= dmg
 
     return player_HP
@@ -528,7 +539,7 @@ def see_inventory_items():
     see_inventory_items = []
     for item in inventory_items:
         see_inventory_items.append(item.name)
-    
+
     if len(see_inventory_items) == 3:
         see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]} / 3. {see_inventory_items[2]}]"
 
@@ -576,12 +587,42 @@ def level_up():
 
 def trap():
     helper.clear_screen()
-    helper.typing(random.choice(trap_messages))
+    helper.typing(random.choice(text.trap_messages))
     dmg = random.randint(1, 2)
     player.health -= dmg
     helper.typing(f"You take {dmg} point{helper.s_or_no_s(dmg)} of damage.")
 
-def add_to_items(loot): #efter trap innan treasure?
+def treasure():
+    helper.typing("You find a treasure chest! Let us take a look at what is inside.")
+
+    if player.level > 8:
+        loot = random.choice(loot_pool_4)
+
+    elif player.level > 6:
+        loot = random.choice(loot_pool_3)
+
+    elif player.level > 4:
+        loot = random.choice(loot_pool_2)
+
+    elif player.level > 2:
+        loot = random.choice(loot_pool_1)
+
+    else:
+        loot = random.choice(loot_pool_0)
+
+    if loot in loot_items:
+        helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
+        add_to_items(loot)
+
+    elif loot in loot_weapons:
+        helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
+        equip(loot)
+
+    elif loot in loot_armour:
+        helper.typing(f"You found a set of {loot.name}. {loot.description}")
+        equip(loot)
+
+def add_to_items(loot):
     if len(inventory_items) >= 3:
         helper.typing(f"Your pockets are full, you would have to throw something away if you want to keep the {loot.name}.")
         while True:
@@ -676,37 +717,6 @@ def equip(loot):
                         helper.typing(f"You decide to keep your {player.armour}.")
                         break
 
-def treasure():
-    helper.clear_screen()
-    helper.typing("You find a treasure chest! Let us take a look at what is inside.")
-
-    if player.level > 8:
-        loot = random.choice(loot_pool_4)
-
-    elif player.level > 6:
-        loot = random.choice(loot_pool_3)
-
-    elif player.level > 4:
-        loot = random.choice(loot_pool_2)
-
-    elif player.level > 2:
-        loot = random.choice(loot_pool_1)
-
-    else:
-        loot = random.choice(loot_pool_0)
-
-    if loot in loot_items:
-        helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
-        add_to_items(loot)
-
-    elif loot in loot_weapons:
-        helper.typing(f"You found {helper.a_or_an(loot.name)} {loot.name}. {loot.description}")
-        equip(loot)
-
-    elif loot in loot_armour:
-        helper.typing(f"You found {loot.name}. {loot.description}")
-        equip(loot)
-
 def bonfire():
     while True:
         helper.clear_screen()
@@ -727,7 +737,7 @@ def bonfire():
                     if hours >= 1 and hours <= 10:
                         for hour in range(hours):
                             if random.randint(1, 100) < (hour + 1) * 5:
-                                helper.typing(random.choice(disturb_messages))
+                                helper.typing(random.choice(text.disturb_messages))
                                 combat()
                                 break
 
