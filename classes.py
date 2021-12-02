@@ -19,13 +19,12 @@ class Player:
         self.health = new_health
 
 class Enemy:
-    def __init__(self, name, HP, ATK, DEF, SPD, EXP):
+    def __init__(self, name, HP, ATK, DEF, SPD):
         self.name = name
         self.health = HP
         self.attack = ATK
         self.defence = DEF
         self.speed = SPD
-        self.experience = EXP
 
 class Boss:
     def __init__(self, name, HP, ATK, DEF, drop, art):
@@ -61,16 +60,16 @@ Enemy creation with the use of the Enemy class and defining attributes for each 
 
 enemy = Enemy(name, health, attack, defence, speed, experience)
 '''
-green_slime = Enemy("Green Slime", 3, 1, 0, 10, 50)
-gnome = Enemy("Gnome", 2, 1, 0, 12, 50)
-goblin = Enemy("Goblin", 6, 2, 1, 8, 100)
-skeleton = Enemy("Skeleton", 4, 2, 2, 8, 100)
-red_slime = Enemy("Red Slime", 9, 3, 0, 10, 150)
-golem = Enemy("Golem", 10, 0, 0, 8, 150)
-treant = Enemy("Treant", 10, 0, 0, 8, 200)
-draugr = Enemy("Draugr", 10, 0, 0, 8, 200)
-blue_slime = Enemy("Blue Slime", 15, 0, 0, 10, 250)
-troll = Enemy("Troll", 10, 0, 0, 8, 250)
+green_slime = Enemy("Green Slime", 3, 1, 0, 10)
+gnome = Enemy("Gnome", 2, 1, 0, 12)
+goblin = Enemy("Goblin", 6, 2, 1, 8)
+skeleton = Enemy("Skeleton", 4, 2, 2, 8)
+red_slime = Enemy("Red Slime", 9, 3, 0, 10)
+golem = Enemy("Golem", 10, 0, 0, 8)
+treant = Enemy("Treant", 10, 0, 0, 8)
+draugr = Enemy("Draugr", 10, 0, 0, 8)
+blue_slime = Enemy("Blue Slime", 15, 0, 0, 10)
+troll = Enemy("Troll", 10, 0, 0, 8)
 
 enemies_list_0 = [green_slime, gnome] # player lvl. 1-2
 enemies_list_1 = [goblin, skeleton] # player lvl. 3-4
@@ -109,16 +108,16 @@ loot_items = [lesser_health_potion, health_potion, plentiful_health_potion, pebb
 # Weapons - weapon = Item(name, description, [attack, speed])
 wooden_sword = Item("Wooden Sword", "Better than a stick.", [1, 0])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [2, 0])
-steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [3, 0])
+steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [4, 0])
 butter_knife = Item("Butter Knife", "Makes the best buttered bread.", [0, 3])
 iron_dagger = Item("Iron Dagger", "Makes stabbing great.", [1, 1])
-steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [3, 2])
+steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [2, 2])
 elven_dagger = Item("Elven Dagger", "LOREM IPSUM", [3, 4])
-rusty_mace = Item("Rusty Mace", "LOREM IPSUM", [2, -1])
-troll_club = Item("Troll Club", "It reeks of troll.", [4, -1])
-orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [6, -2])
-ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [6, 3])
-ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [9, -3])
+rusty_mace = Item("Rusty Mace", "LOREM IPSUM", [2, -2])
+troll_club = Item("Troll Club", "It reeks of troll.", [3, -1])
+orcish_mace = Item("Orcish Mace", "Orcs are known for their craftsmanship.", [5, -2])
+ancient_nordic_shortsword = Item("Ancient Nordic Shortsword", "LOREM IPSUM", [5, 1])
+ancient_nordic_greatsword = Item("Ancient Nordic Greatsword", "LOREM IPSUM", [7, -3])
 
 loot_weapons = [wooden_sword, iron_sword, steel_sword, butter_knife, iron_dagger, steel_dagger, elven_dagger, rusty_mace, troll_club, orcish_mace, ancient_nordic_shortsword, ancient_nordic_greatsword, ogre_hammer]
 
@@ -134,7 +133,7 @@ rusty_armour = Item("Rusty Armour", "This armour has seen better days.", [2, -2]
 iron_armour = Item("Iron Armour", "The most common set of armour worn throughout the lands.", [3, -2])
 steel_armour = Item("Steel Armour", "Forged in the mountains by dwarfs.", [4, -2])
 orcish_armour = Item("Orchish Armour", "Smells like orc.", [6, -3])
-ancient_nordic_armour = Item("Ancient Nordic Armour", "This cold frozen armour was thought to be a myth.", [9, -3])
+ancient_nordic_armour = Item("Ancient Nordic Armour", "This cold frozen armour was thought to be a myth.", [8, -2])
 
 loot_armour = [hide_armour, fur_armour, leather_armour, elven_armour, shrouded_armour, rusty_armour, iron_armour, steel_armour, orcish_armour, ancient_nordic_armour, dragonscale_armour]
 

@@ -164,7 +164,7 @@ def check_inventory():
             else:
                 SPD_buff = f"({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})"
 
-    level_up_exp = 100 * player.level
+    level_up_exp = player.level * 100
     if player.level == 10:
         player.experience = "MAX"
         level_up_exp = "MAX"
@@ -480,9 +480,9 @@ def combat():
 
 
         elif type(enemy) != Boss and player.level != 10:
-            typing(f"You gain {enemy.experience} experience points.")
-            player.experience += enemy.experience
-            level_up_exp = 100 * player.level
+            level_up_exp = player.level * 100
+            typing(f"You gain {round(level_up_exp / 2)} experience points.")
+            player.experience += round(level_up_exp / 2)
             if player.experience >= level_up_exp:
                 player.experience -= level_up_exp
                 player.level += 1
