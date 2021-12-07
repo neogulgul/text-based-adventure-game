@@ -157,7 +157,7 @@ def check_inventory():
 
         print(f'''
     {player.name}'s Stats & Inventory
-    {"‾" * len(player.name)}‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    {"‾" * (len(player.name) + len("'s Stats & Inventory"))}
     Name: {player.name}
     LV: {player.level}
     EXP: {player.experience}/{level_up_exp}
@@ -222,8 +222,6 @@ If you are wondering what some of the stats mean, here is a list of them all.
     Can be influenced by weapons.
 
     • DEF (Defence) - This stat determines how well you can defend against enemy attacks.
-    For every 3 of your defence points an enemy attack is reduced by 1 point, unless you defend successfully where the attack is reduced by 1 point for each one of your defence points.
-    Critical hits negate all defence.
     Can be influenced by armour.
 
     • SPD (Speed) - This stat determines who goes first in battle, you or your opponent, depending on who has the higher speed stat.
@@ -477,7 +475,7 @@ def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP,
 
         else:
             crit = ""
-            dmg = player_ATK - math.floor(enemy_DEF / 3)
+            dmg = player_ATK
             if hit == 10:
                 crit = "A critical hit! "
                 dmg = player_ATK * 2
@@ -511,7 +509,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
 
         else:
             crit = ""
-            dmg = enemy_ATK - math.floor(player_DEF / 3)
+            dmg = enemy_ATK
             if hit == 10:
                 crit = "A critical hit! "
                 dmg = enemy_ATK * 2
@@ -528,7 +526,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
                         helper.typing(f"You successfully defended against the enemy attack and took 0 points of damage.")
 
                     else:
-                        (f"You successfully defended against the enemy attack and only took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                        helper.typing(f"You successfully defended against the enemy attack and only took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
                         player_HP -= dmg
 
             else:
