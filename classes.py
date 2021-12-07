@@ -64,17 +64,17 @@ green_slime = Enemy("Green Slime", 3, 1, 0, 10)
 gnome = Enemy("Gnome", 2, 1, 0, 12)
 rat = Enemy("Rat", 2, 1, 0, 11)
 
-red_slime = Enemy("Red Slime", 6, 1, 0, 10)
+red_slime = Enemy("Red Slime", 6, 2, 0, 10)
 goblin = Enemy("Goblin", 7, 2, 1, 8)
 skeleton = Enemy("Skeleton", 6, 2, 2, 8)
 
-blue_slime = Enemy("Blue Slime", 9, 2, 0, 10)
+blue_slime = Enemy("Blue Slime", 9, 3, 0, 10)
 golem = Enemy("Golem", 10, 3, 5, 8)
 mimic = Enemy("Mimic", 6, 3, 3, 12)
 
 draugr = Enemy("Draugr", 12, 3, 2, 8)
 hobgoblin = Enemy("Hobgoblin", 14, 4, 2, 9)
-phoenix = Enemy("Phoenix", 10, 3, 0, 15)
+phoenix = Enemy("Phoenix", 10, 3, 1, 15)
 
 baby_dragon = Enemy("Baby Dragon", 15, 4, 1, 10)
 troll = Enemy("Troll", 18, 4, 4, 7)
