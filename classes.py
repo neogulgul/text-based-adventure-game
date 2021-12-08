@@ -62,23 +62,23 @@ enemy = Enemy(name, health, attack, defence, speed)
 '''
 green_slime = Enemy("Green Slime", 3, 1, 0, 10)
 gnome = Enemy("Gnome", 2, 1, 0, 12)
-rat = Enemy("Rat", 2, 1, 0, 11)
+rat = Enemy("Rat", 2, 1, 1, 10)
 
 red_slime = Enemy("Red Slime", 6, 2, 0, 10)
-goblin = Enemy("Goblin", 7, 2, 1, 8)
-skeleton = Enemy("Skeleton", 6, 2, 2, 8)
+goblin = Enemy("Goblin", 7, 2, 2, 9)
+skeleton = Enemy("Skeleton", 7, 2, 3, 8)
 
 blue_slime = Enemy("Blue Slime", 9, 3, 0, 10)
-golem = Enemy("Golem", 10, 3, 5, 8)
-mimic = Enemy("Mimic", 6, 3, 3, 12)
+golem = Enemy("Golem", 10, 3, 5, 5)
+mimic = Enemy("Mimic", 8, 3, 3, 12)
 
-draugr = Enemy("Draugr", 12, 3, 2, 8)
-hobgoblin = Enemy("Hobgoblin", 14, 4, 2, 9)
-phoenix = Enemy("Phoenix", 10, 3, 1, 15)
+draugr = Enemy("Draugr", 13, 3, 4, 7)
+hobgoblin = Enemy("Hobgoblin", 12, 3, 3, 9)
+phoenix = Enemy("Phoenix", 10, 4, 1, 14)
 
-baby_dragon = Enemy("Baby Dragon", 15, 4, 1, 10)
-troll = Enemy("Troll", 18, 4, 4, 7)
-wraith = Enemy("Wraith", 12, 4, 0, 14)
+baby_dragon = Enemy("Baby Dragon", 15, 3, 3, 10)
+troll = Enemy("Troll", 18, 4, 4, 6)
+wraith = Enemy("Wraith", 10, 5, 0, 13)
 
 
 enemies_list_0 = [green_slime, gnome, rat] # player lvl. 1-2
@@ -97,7 +97,7 @@ ogre_hammer = Item("Ogre Hammer", "A heavy hammer wielded by most ogres.", [5, -
 dragonscale_armour = Item("Dragonscale Armour", "Crafted with scales from a dragon.", [10, 0]) # Armour
 
 ogre = Boss("Ogre", 35, 3, 6, ogre_hammer, art.OGRE) # First Boss (after player reaches lvl 5)
-dragon = Boss("Dragon", 75, 5, 15, dragonscale_armour, art.DRAGON) # Last Boss (after player reaches lvl 10)
+dragon = Boss("Dragon", 75, 6, 18, dragonscale_armour, art.DRAGON) # Last Boss (after player reaches lvl 10)
 
 '''
 Item creation with the use of the Item class and defining attributes for each unique item.

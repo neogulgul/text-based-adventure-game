@@ -98,22 +98,17 @@ def explore():
     return True
 
 def check_inventory():
+    ATK_buff = ""
+    DEF_buff = ""
+    SPD_buff = ""
+
     if player.weapon != None:
         ATK_buff = f"(+{player.weapon_stat[0]} from {player.weapon})"
-
-    else:
-        ATK_buff = ""
 
     if player.armour != None:
         DEF_buff = f"(+{player.armour_stat[0]} from {player.armour})"
 
-    else:
-        DEF_buff = ""
-
-    if player.weapon_stat[1] == 0 and player.armour_stat[1] == 0:
-        SPD_buff = ""
-
-    else:
+    if player.weapon_stat[1] != 0 and player.armour_stat[1] != 0:
         if player.weapon_stat[1] != 0 and player.armour_stat[1] == 0:
             if player.weapon_stat[1] > 0:
                 SPD_buff = f"(+{player.weapon_stat[1]} from {player.weapon})"
@@ -142,13 +137,10 @@ def check_inventory():
 
     if len(inventory_items) == 3:
         item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
-
     elif len(inventory_items) == 2:
         item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, None
-
     elif len(inventory_items) == 1:
         item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, None, None
-
     else:
         item_slot_1, item_slot_2, item_slot_3 = None, None, None
 
@@ -157,7 +149,7 @@ def check_inventory():
 
         print(f'''
     {player.name}'s Stats & Inventory
-    {"‾" * (len(player.name) + len("'s Stats & Inventory"))}
+    {"‾" * len(f"{player.name}'s Stats & Inventory")}
     Name: {player.name}
     LV: {player.level}
     EXP: {player.experience}/{level_up_exp}
@@ -293,7 +285,7 @@ def combat():
 
     else:
         if enemy == mimic:
-            helper.typing("You find a treasure chest! Let us take a look... wait. Wah! *The treasure chest lunges towards you.*")
+            helper.typing("You find a treasure chest! Let us take a look... wait. *The treasure chest lunges towards you.*")
         helper.typing(f"You encounter {helper.a_or_an(enemy.name)} {enemy.name}.")
 
     while battle:
