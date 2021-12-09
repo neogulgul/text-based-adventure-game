@@ -72,7 +72,7 @@ class Player:
             helper.clear_screen()
 
             print(f'''
-        {self.name} the {self.role} 
+        {self.name} the {self.role}
         {"‾" * len(f"{self.name} the {self.role}")}
         Name: {self.name}
         LV: {self.level}

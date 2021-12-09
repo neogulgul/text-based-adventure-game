@@ -1,8 +1,8 @@
 from main import *
 
 def play():
-    #title_screen()
-    #intro()
+    title_screen()
+    intro()
     character_creation()
     adventure()
 
