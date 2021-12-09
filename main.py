@@ -135,12 +135,12 @@ def check_inventory():
         player.experience = "MAX"
         level_up_exp = "MAX"
 
-    if len(inventory_items) == 3:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, inventory_items[2].name
-    elif len(inventory_items) == 2:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, inventory_items[1].name, None
-    elif len(inventory_items) == 1:
-        item_slot_1, item_slot_2, item_slot_3 = inventory_items[0].name, None, None
+    if len(player.inventory) == 3:
+        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, player.inventory[1].name, player.inventory[2].name
+    elif len(player.inventory) == 2:
+        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, player.inventory[1].name, None
+    elif len(player.inventory) == 1:
+        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, None, None
     else:
         item_slot_1, item_slot_2, item_slot_3 = None, None, None
 
@@ -232,7 +232,7 @@ Bosses:
 PRO TIP: It is faster to type only the number in front of a given input (if it has one) instead of the whole word.
 ''')
 
-        player_input = input('Type "back" to go back or "quit" to quit the game. -> ').lower()
+        player_input = input('Type "back" to go back or "quit" to quit the game. !!!choosing quit does NOT save your progress!!! -> ').lower()
 
         if player_input == "back":
             return True
@@ -312,31 +312,31 @@ def combat():
             continue
 
         elif player_action in ["item", "3"]:
-            if len(inventory_items) == 0:
+            if len(player.inventory) == 0:
                 helper.typing("You have no items.")
                 continue
 
             else:
                 while True:
                     helper.clear_screen()
-                    item_chosen = input(f'What item do you want to use? {see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    item_chosen = input(f'What item do you want to use? {see_player_inventory()} (Type "back" to go back) -> ').lower()
                     if item_chosen == "back":
                         break
 
-                    for item in inventory_items:
+                    for item in player.inventory:
                         if item.name.lower() == item_chosen:
                             item_chosen = item
 
-                    if item_chosen == "3" and len(inventory_items) == 3:
-                        item_chosen = inventory_items[2]
+                    if item_chosen == "3" and len(player.inventory) == 3:
+                        item_chosen = player.inventory[2]
 
-                    elif item_chosen == "2" and len(inventory_items) >= 2:
-                        item_chosen = inventory_items[1]
+                    elif item_chosen == "2" and len(player.inventory) >= 2:
+                        item_chosen = player.inventory[1]
 
                     elif item_chosen == "1":
-                        item_chosen = inventory_items[0]
+                        item_chosen = player.inventory[0]
 
-                    if item_chosen not in inventory_items:
+                    if item_chosen not in player.inventory:
                         continue
 
                     if item_chosen in [lesser_health_potion, health_potion, plentiful_health_potion]:
@@ -366,7 +366,7 @@ def combat():
                         helper.typing("You throw the smoke bomb on the ground and flee from battle.")
                         battle = False
 
-                    inventory_items.remove(item_chosen)
+                    player.inventory.remove(item_chosen)
                     break
 
                 if item_chosen == "back":
@@ -527,21 +527,21 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
 
     return player_HP
 
-def see_inventory_items():
-    see_inventory_items = []
-    for item in inventory_items:
-        see_inventory_items.append(item.name)
+def see_player_inventory():
+    see_player_inventory = []
+    for item in player.inventory:
+        see_player_inventory.append(item.name)
 
-    if len(see_inventory_items) == 3:
-        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]} / 3. {see_inventory_items[2]}]"
+    if len(see_player_inventory) == 3:
+        see_player_inventory = f"[1. {see_player_inventory[0]} / 2. {see_player_inventory[1]} / 3. {see_player_inventory[2]}]"
 
-    elif len(see_inventory_items) == 2:
-        see_inventory_items = f"[1. {see_inventory_items[0]} / 2. {see_inventory_items[1]}]"
+    elif len(see_player_inventory) == 2:
+        see_player_inventory = f"[1. {see_player_inventory[0]} / 2. {see_player_inventory[1]}]"
 
     else:
-        see_inventory_items = f"[1. {see_inventory_items[0]}]"
+        see_player_inventory = f"[1. {see_player_inventory[0]}]"
 
-    return see_inventory_items
+    return see_player_inventory
 
 def level_up():
     while True:
@@ -616,7 +616,7 @@ def treasure():
         equip(loot)
 
 def add_to_items(loot):
-    if len(inventory_items) >= 3:
+    if len(player.inventory) >= 3:
         helper.typing(f"Your pockets are full, you would have to throw something away if you want to keep the {loot.name}.")
         while True:
             helper.clear_screen()
@@ -625,27 +625,27 @@ def add_to_items(loot):
             if throw_or_keep == "y":
                 while True:
                     helper.clear_screen()
-                    discard = input(f'What do you want to throw away? {see_inventory_items()} (Type "back" to go back) -> ').lower()
+                    discard = input(f'What do you want to throw away? {see_player_inventory()} (Type "back" to go back) -> ').lower()
                     if discard == "back":
                         break
 
-                    for item in inventory_items:
+                    for item in player.inventory:
                         if item.name.lower() == discard:
                             discard = item
 
-                    if discard == "3" and len(inventory_items) == 3:
-                        discard = inventory_items[2]
+                    if discard == "3" and len(player.inventory) == 3:
+                        discard = player.inventory[2]
 
-                    elif discard == "2" and len(inventory_items) >= 2:
-                        discard = inventory_items[1]
+                    elif discard == "2" and len(player.inventory) >= 2:
+                        discard = player.inventory[1]
 
                     elif discard == "1":
-                        discard = inventory_items[0]
+                        discard = player.inventory[0]
 
-                    if discard in inventory_items:
+                    if discard in player.inventory:
                         helper.typing(f"You threw away your {discard.name} and kept the {loot.name}.")
-                        inventory_items.remove(discard)
-                        inventory_items.append(loot)
+                        player.inventory.remove(discard)
+                        player.inventory.append(loot)
                         break
 
                 if discard == "back":
@@ -659,7 +659,7 @@ def add_to_items(loot):
 
     else:
         helper.typing(f"You put the {loot.name} in your pocket.")
-        inventory_items.append(loot)
+        player.inventory.append(loot)
 
 def equip(loot):
     if loot in loot_weapons:

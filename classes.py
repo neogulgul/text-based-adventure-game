@@ -10,6 +10,7 @@ class Player:
         self.speed = SPD
         self.level = 1
         self.experience = 0
+        self.inventory = []
         self.weapon = None
         self.weapon_stat = [0, 0]
         self.armour = None
@@ -62,15 +63,15 @@ enemy = Enemy(name, health, attack, defence, speed)
 '''
 green_slime = Enemy("Green Slime", 3, 1, 0, 10)
 gnome = Enemy("Gnome", 2, 1, 0, 12)
-rat = Enemy("Rat", 2, 1, 1, 10)
+rat = Enemy("Rat", 2, 2, 1, 10)
 
 red_slime = Enemy("Red Slime", 6, 2, 0, 10)
-goblin = Enemy("Goblin", 7, 2, 2, 9)
+goblin = Enemy("Goblin", 7, 3, 2, 9)
 skeleton = Enemy("Skeleton", 7, 2, 3, 8)
 
 blue_slime = Enemy("Blue Slime", 9, 3, 0, 10)
 golem = Enemy("Golem", 10, 3, 5, 5)
-mimic = Enemy("Mimic", 8, 3, 3, 12)
+mimic = Enemy("Mimic", 8, 4, 3, 12)
 
 draugr = Enemy("Draugr", 13, 3, 4, 7)
 hobgoblin = Enemy("Hobgoblin", 12, 3, 3, 9)
@@ -96,8 +97,8 @@ boss = Boss(name, health, attack, defence, item drop, ascii art)
 ogre_hammer = Item("Ogre Hammer", "A heavy hammer wielded by most ogres.", [5, -3]) # Weapon
 dragonscale_armour = Item("Dragonscale Armour", "Crafted with scales from a dragon.", [10, 0]) # Armour
 
-ogre = Boss("Ogre", 35, 3, 6, ogre_hammer, art.OGRE) # First Boss (after player reaches lvl 5)
-dragon = Boss("Dragon", 75, 6, 18, dragonscale_armour, art.DRAGON) # Last Boss (after player reaches lvl 10)
+ogre = Boss("Ogre", 30, 3, 6, ogre_hammer, art.OGRE) # First Boss (after player reaches lvl 5)
+dragon = Boss("Dragon", 60, 5, 15, dragonscale_armour, art.DRAGON) # Last Boss (after player reaches lvl 10)
 
 '''
 Item creation with the use of the Item class and defining attributes for each unique item.
@@ -120,7 +121,7 @@ wooden_sword = Item("Wooden Sword", "Better than a stick.", [1, 0])
 iron_sword = Item("Iron Sword", "A common weapon amongst travelers.", [2, 0])
 steel_sword = Item("Steel Sword", "Hard and tough, perfect for butchering.", [4, 0])
 butter_knife = Item("Butter Knife", "Great for making buttered toast.", [0, 3])
-iron_dagger = Item("Iron Dagger", "Makes stabbing feel great.", [1, 1])
+iron_dagger = Item("Iron Dagger", "Makes stabbing great.", [1, 1])
 steel_dagger = Item("Steel Dagger", "An assasin's best friend.", [2, 2])
 elven_dagger = Item("Elven Dagger", "Smithed by the elves.", [3, 4])
 rusty_mace = Item("Rusty Mace", "One mans trash is another mans... weapon?", [2, -2])
@@ -153,5 +154,3 @@ loot_pool_1 = [lesser_health_potion, rock, iron_sword, troll_club, fur_armour, i
 loot_pool_2 = [health_potion, smoke_bomb, steel_sword, steel_dagger, leather_armour, steel_armour] # player lvl. 5-6
 loot_pool_3 = [health_potion, smoke_bomb, elven_dagger, orcish_mace, elven_armour, orcish_armour] # player lvl. 7-8
 loot_pool_4 = [plentiful_health_potion, smoke_bomb, mage_scroll, ancient_nordic_shortsword, ancient_nordic_greatsword, shrouded_armour, ancient_nordic_armour] # player lvl. 9+
-
-inventory_items = [] # The player's inventory of usable items
