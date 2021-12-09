@@ -57,7 +57,7 @@ def adventure():
                 break
 
         elif choice in ["inventory", "2"]:
-            check_inventory()
+            player.check_inventory()
             continue
 
         elif choice == "info":
@@ -96,79 +96,6 @@ def explore():
 
     game_info.plus_room_count()
     return True
-
-def check_inventory():
-    ATK_buff = ""
-    DEF_buff = ""
-    SPD_buff = ""
-
-    if player.weapon != None:
-        ATK_buff = f"(+{player.weapon_stat[0]} from {player.weapon})"
-
-    if player.armour != None:
-        DEF_buff = f"(+{player.armour_stat[0]} from {player.armour})"
-
-    if player.weapon_stat[1] != 0 and player.armour_stat[1] != 0:
-        if player.weapon_stat[1] != 0 and player.armour_stat[1] == 0:
-            if player.weapon_stat[1] > 0:
-                SPD_buff = f"(+{player.weapon_stat[1]} from {player.weapon})"
-
-            else:
-                SPD_buff = f"({player.weapon_stat[1]} from {player.weapon})"
-
-        elif player.weapon_stat[1] == 0 and player.armour_stat[1] != 0:
-            if player.armour_stat[1] > 0:
-                SPD_buff = f"(+{player.armour_stat[1]} from {player.armour})"
-
-            else:
-                SPD_buff = f"({player.armour_stat[1]} from {player.armour})"
-
-        else:
-            if player.weapon_stat[1] + player.armour_stat[1] > 0:
-                SPD_buff = f"(+{player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})"
-
-            else:
-                SPD_buff = f"({player.weapon_stat[1] + player.armour_stat[1]} from {player.weapon} and {player.armour})"
-
-    level_up_exp = player.level * 100
-    if player.level == 10:
-        player.experience = "MAX"
-        level_up_exp = "MAX"
-
-    if len(player.inventory) == 3:
-        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, player.inventory[1].name, player.inventory[2].name
-    elif len(player.inventory) == 2:
-        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, player.inventory[1].name, None
-    elif len(player.inventory) == 1:
-        item_slot_1, item_slot_2, item_slot_3 = player.inventory[0].name, None, None
-    else:
-        item_slot_1, item_slot_2, item_slot_3 = None, None, None
-
-    while True:
-        helper.clear_screen()
-
-        print(f'''
-    {player.name}'s Stats & Inventory
-    {"‾" * len(f"{player.name}'s Stats & Inventory")}
-    Name: {player.name}
-    LV: {player.level}
-    EXP: {player.experience}/{level_up_exp}
-    HP: {player.health}/{player.max_health}
-    ATK: {player.attack + player.weapon_stat[0]} {ATK_buff}
-    DEF: {player.defence + player.armour_stat[0]} {DEF_buff}
-    SPD: {player.speed + player.weapon_stat[1] + player.armour_stat[1]} {SPD_buff}
-
-    Weapon: {player.weapon}
-    Armour: {player.armour}
-    Item slot 1: {item_slot_1}
-    Item slot 2: {item_slot_2}
-    Item slot 3: {item_slot_3}
-''')
-
-        player_input = input('Type "back" to go back. -> ').lower()
-
-        if player_input == "back":
-            break
 
 def info():
     while True:

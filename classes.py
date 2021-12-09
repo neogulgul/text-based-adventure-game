@@ -1,4 +1,5 @@
 import art
+import helper
 
 class Player:
     def __init__(self, name, HP, ATK, DEF, SPD):
@@ -18,6 +19,79 @@ class Player:
 
     def set_health(self, new_health):
         self.health = new_health
+
+    def check_inventory(self):
+        ATK_buff = ""
+        DEF_buff = ""
+        SPD_buff = ""
+
+        if self.weapon != None:
+            ATK_buff = f"(+{self.weapon_stat[0]} from {self.weapon})"
+
+        if self.armour != None:
+            DEF_buff = f"(+{self.armour_stat[0]} from {self.armour})"
+
+        if self.weapon_stat[1] != 0 and self.armour_stat[1] != 0:
+            if self.weapon_stat[1] != 0 and self.armour_stat[1] == 0:
+                if self.weapon_stat[1] > 0:
+                    SPD_buff = f"(+{self.weapon_stat[1]} from {self.weapon})"
+
+                else:
+                    SPD_buff = f"({self.weapon_stat[1]} from {self.weapon})"
+
+            elif self.weapon_stat[1] == 0 and self.armour_stat[1] != 0:
+                if self.armour_stat[1] > 0:
+                    SPD_buff = f"(+{self.armour_stat[1]} from {self.armour})"
+
+                else:
+                    SPD_buff = f"({self.armour_stat[1]} from {self.armour})"
+
+            else:
+                if self.weapon_stat[1] + self.armour_stat[1] > 0:
+                    SPD_buff = f"(+{self.weapon_stat[1] + self.armour_stat[1]} from {self.weapon} and {self.armour})"
+
+                else:
+                    SPD_buff = f"({self.weapon_stat[1] + self.armour_stat[1]} from {self.weapon} and {self.armour})"
+
+        level_up_exp = self.level * 100
+        if self.level == 10:
+            self.experience = "MAX"
+            level_up_exp = "MAX"
+
+        if len(self.inventory) == 3:
+            item_slot_1, item_slot_2, item_slot_3 = self.inventory[0].name, self.inventory[1].name, self.inventory[2].name
+        elif len(self.inventory) == 2:
+            item_slot_1, item_slot_2, item_slot_3 = self.inventory[0].name, self.inventory[1].name, None
+        elif len(self.inventory) == 1:
+            item_slot_1, item_slot_2, item_slot_3 = self.inventory[0].name, None, None
+        else:
+            item_slot_1, item_slot_2, item_slot_3 = None, None, None
+
+        while True:
+            helper.clear_screen()
+
+            print(f'''
+        {self.name}'s Stats & Inventory
+        {"‾" * len(f"{self.name}'s Stats & Inventory")}
+        Name: {self.name}
+        LV: {self.level}
+        EXP: {self.experience}/{level_up_exp}
+        HP: {self.health}/{self.max_health}
+        ATK: {self.attack + self.weapon_stat[0]} {ATK_buff}
+        DEF: {self.defence + self.armour_stat[0]} {DEF_buff}
+        SPD: {self.speed + self.weapon_stat[1] + self.armour_stat[1]} {SPD_buff}
+
+        Weapon: {self.weapon}
+        Armour: {self.armour}
+        Item slot 1: {item_slot_1}
+        Item slot 2: {item_slot_2}
+        Item slot 3: {item_slot_3}
+    ''')
+
+            player_input = input('Type "back" to go back. -> ').lower()
+
+            if player_input == "back":
+                break
 
 class Enemy:
     def __init__(self, name, HP, ATK, DEF, SPD):
