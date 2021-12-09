@@ -45,19 +45,22 @@ def character_creation():
             player_attack = 1
             player_defence = 0
             player_speed = 10
+            player_role = "Warrior"
         elif player_class in ["2", "assassin"]:
             player_health = 8
             player_attack = 1
             player_defence = 0
             player_speed = 12
+            player_role = "Assassin"
         elif player_class in ["3", "bruiser"]:
             player_health = 12
             player_attack = 1
             player_defence = 1
             player_speed = 7
+            player_role = "Bruiser"
         break
 
-    player = Player(player_name, player_health, player_attack, player_defence, player_speed)
+    player = Player(player_name, player_role, player_health, player_attack, player_defence, player_speed)
 
 def adventure():
     while True:
@@ -106,7 +109,7 @@ def explore():
 
     if player.health <= 0:
         helper.typing(f"You have died. Game Over.")
-        helper.typing(f"In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
+        helper.typing(f"You picked the {player.role} class. In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
         return False
 
     game_info.plus_room_count()

@@ -2,8 +2,9 @@ import art
 import helper
 
 class Player:
-    def __init__(self, name, HP, ATK, DEF, SPD):
+    def __init__(self, name, role, HP, ATK, DEF, SPD):
         self.name = name
+        self.role = role
         self.health = HP
         self.max_health = HP
         self.attack = ATK
@@ -71,8 +72,8 @@ class Player:
             helper.clear_screen()
 
             print(f'''
-        {self.name}'s Stats & Inventory
-        {"‾" * len(f"{self.name}'s Stats & Inventory")}
+        {self.name} the {self.role} 
+        {"‾" * len(f"{self.name} the {self.role}")}
         Name: {self.name}
         LV: {self.level}
         EXP: {self.experience}/{level_up_exp}
