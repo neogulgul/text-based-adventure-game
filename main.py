@@ -37,10 +37,25 @@ def character_creation():
             print("ERROR: ", end = "", flush = True)
             helper.typing("Only letters from the alphabet are allowed, and no more than 20 characters long.")
 
-    player_health = 10
-    player_attack = 1
-    player_defence = 0
-    player_speed = 10
+    while True:
+        helper.clear_screen()
+        player_class = input("What class would you like to choose [1. Warrior / 2. Assassin / 3. Bruiser ] -> ").lower()  
+        if player_class in ["1", "warrior"]:
+            player_health = 10
+            player_attack = 1
+            player_defence = 0
+            player_speed = 10
+        elif player_class in ["2", "assassin"]:
+            player_health = 8
+            player_attack = 1
+            player_defence = 0
+            player_speed = 12
+        elif player_class in ["3", "bruiser"]:
+            player_health = 12
+            player_attack = 1
+            player_defence = 1
+            player_speed = 7
+        break
 
     player = Player(player_name, player_health, player_attack, player_defence, player_speed)
 
