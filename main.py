@@ -246,7 +246,7 @@ def combat():
             else:
                 while True:
                     helper.clear_screen()
-                    item_chosen = input(f'What item do you want to use? {see_player_inventory()} (Type "back" to go back) -> ').lower()
+                    item_chosen = input(f'What item do you want to use? {player.see_player_inventory()} (Type "back" to go back) -> ').lower()
                     if item_chosen == "back":
                         break
 
@@ -454,21 +454,7 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
 
     return player_HP
 
-def see_player_inventory():
-    see_player_inventory = []
-    for item in player.inventory:
-        see_player_inventory.append(item.name)
 
-    if len(see_player_inventory) == 3:
-        see_player_inventory = f"[1. {see_player_inventory[0]} / 2. {see_player_inventory[1]} / 3. {see_player_inventory[2]}]"
-
-    elif len(see_player_inventory) == 2:
-        see_player_inventory = f"[1. {see_player_inventory[0]} / 2. {see_player_inventory[1]}]"
-
-    else:
-        see_player_inventory = f"[1. {see_player_inventory[0]}]"
-
-    return see_player_inventory
 
 def level_up():
     while True:
@@ -552,7 +538,7 @@ def add_to_items(loot):
             if throw_or_keep == "y":
                 while True:
                     helper.clear_screen()
-                    discard = input(f'What do you want to throw away? {see_player_inventory()} (Type "back" to go back) -> ').lower()
+                    discard = input(f'What do you want to throw away? {player.see_player_inventory()} (Type "back" to go back) -> ').lower()
                     if discard == "back":
                         break
 

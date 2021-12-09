@@ -93,6 +93,22 @@ class Player:
             if player_input == "back":
                 break
 
+def see_player_inventory(self):
+        player_inventory = []
+        for item in self.inventory:
+            player_inventory.append(item.name)
+
+        if len(player_inventory) == 3:
+            player_inventory = f"[1. {player_inventory[0]} / 2. {player_inventory[1]} / 3. {player_inventory[2]}]"
+
+        elif len(player_inventory) == 2:
+            player_inventory = f"[1. {player_inventory[0]} / 2. {player_inventory[1]}]"
+
+        else:
+            player_inventory = f"[1. {player_inventory[0]}]"
+
+        return player_inventory
+
 class Enemy:
     def __init__(self, name, HP, ATK, DEF, SPD):
         self.name = name
