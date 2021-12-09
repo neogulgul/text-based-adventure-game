@@ -40,8 +40,8 @@ def character_creation():
 
     while True:
         helper.clear_screen()
-        player_class = input("What class would you like to choose [1. Warrior / 2. Assassin / 3. Bruiser] -> ").lower()
-        if player_class in ["warrior", "1"]:
+        role = input("Which role do you want to play as? [1. Warrior / 2. Assassin / 3. Bruiser] -> ").lower()
+        if role in ["warrior", "1"]:
             player_role = "Warrior"
             player_health = 10
             player_attack = 1
@@ -49,7 +49,7 @@ def character_creation():
             player_speed = 10
             break
 
-        elif player_class in ["assassin", "2"]:
+        elif role in ["assassin", "2"]:
             player_role = "Assassin"
             player_health = 8
             player_attack = 1
@@ -57,7 +57,7 @@ def character_creation():
             player_speed = 12
             break
 
-        elif player_class in ["bruiser", "3"]:
+        elif role in ["bruiser", "3"]:
             player_role = "Bruiser"
             player_health = 12
             player_attack = 1
@@ -682,3 +682,5 @@ def bonfire():
 
         elif rest == "n":
             break
+
+# THE END :D
