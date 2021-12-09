@@ -145,8 +145,6 @@ class Game_Info:
     def plus_enemy_count(self):
         self.enemy_count += 1
 
-game_info = Game_Info()
-
 '''
 Enemy creation with the use of the Enemy class and defining attributes for each unique enemy.
 

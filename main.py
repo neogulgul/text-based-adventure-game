@@ -5,6 +5,7 @@ from classes import *
 import helper
 import text
 
+game_info = Game_Info()
 start_time = time.time()
 
 def title_screen():
@@ -39,26 +40,30 @@ def character_creation():
 
     while True:
         helper.clear_screen()
-        player_class = input("What class would you like to choose [1. Warrior / 2. Assassin / 3. Bruiser ] -> ").lower()  
+        player_class = input("What class would you like to choose [1. Warrior / 2. Assassin / 3. Bruiser ] -> ").lower()
         if player_class in ["1", "warrior"]:
+            player_role = "Warrior"
             player_health = 10
             player_attack = 1
             player_defence = 0
             player_speed = 10
-            player_role = "Warrior"
+            break
+
         elif player_class in ["2", "assassin"]:
+            player_role = "Assassin"
             player_health = 8
             player_attack = 1
             player_defence = 0
             player_speed = 12
-            player_role = "Assassin"
+            break
+
         elif player_class in ["3", "bruiser"]:
+            player_role = "Bruiser"
             player_health = 12
             player_attack = 1
-            player_defence = 1
-            player_speed = 7
-            player_role = "Bruiser"
-        break
+            player_defence = 2
+            player_speed = 6
+            break
 
     player = Player(player_name, player_role, player_health, player_attack, player_defence, player_speed)
 
@@ -109,7 +114,7 @@ def explore():
 
     if player.health <= 0:
         helper.typing(f"You have died. Game Over.")
-        helper.typing(f"You picked the {player.role} class. In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
+        helper.typing(f"In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
         return False
 
     game_info.plus_room_count()
@@ -374,7 +379,7 @@ def combat():
                         battle = False
 
     if player_HP <= 0:
-        helper.typing(f"{player.name} has been slain by the {enemy.name}.")
+        helper.typing(f"{player.name} the {player.role} has been slain by the {enemy.name}.")
 
     elif enemy_HP <= 0:
         game_info.plus_enemy_count()
