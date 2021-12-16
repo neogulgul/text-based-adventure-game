@@ -24,8 +24,8 @@ def a_or_an(word):
 
     return "a"
 
-def s_or_no_s(dmg):
-    if dmg == 1:
+def s_or_no_s(x):
+    if x == 1:
         return "" # no s :(
 
     return "s" # s :)

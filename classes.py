@@ -32,7 +32,7 @@ class Player:
         if self.armour != None:
             DEF_buff = f"(+{self.armour_stat[0]} from {self.armour})"
 
-        if self.weapon_stat[1] != 0 and self.armour_stat[1] != 0:
+        if self.weapon_stat[1] != 0 or self.armour_stat[1] != 0:
             if self.weapon_stat[1] != 0 and self.armour_stat[1] == 0:
                 if self.weapon_stat[1] > 0:
                     SPD_buff = f"(+{self.weapon_stat[1]} from {self.weapon})"

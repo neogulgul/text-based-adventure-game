@@ -43,7 +43,7 @@ def character_creation():
         role = input("Which role do you want to play as? [1. Warrior / 2. Assassin / 3. Bruiser] -> ").lower()
         if role in ["warrior", "1"]:
             player_role = "Warrior"
-            player_health = 10
+            player_health = 1 #10
             player_attack = 1
             player_defence = 0
             player_speed = 10
@@ -112,12 +112,13 @@ def explore():
             random.choice(rooms)()
             break
 
+    game_info.plus_room_count()
+
     if player.health <= 0:
         helper.typing(f"You have died. Game Over.")
-        helper.typing(f"In your playthrough you visited {game_info.room_count} rooms, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
+        helper.typing(f"In your playthrough you visited {game_info.room_count} room{helper.s_or_no_s(game_info.room_count)}, defeated {game_info.enemy_count} enemies, and reached level {player.level}.")
         return False
 
-    game_info.plus_room_count()
     return True
 
 def info():
@@ -378,8 +379,10 @@ def combat():
                     if enemy_HP <= 0:
                         battle = False
 
+    player.set_health(player_HP)
+
     if player_HP <= 0:
-        helper.typing(f"{player.name} the {player.role} has been slain by the {enemy.name}.")
+        helper.typing(f"{player.name} the {player.role} has been slain by a {enemy.name}.")
 
     elif enemy_HP <= 0:
         game_info.plus_enemy_count()
@@ -406,8 +409,6 @@ def combat():
                 helper.typing(f"You leveled up! You are now level {player.level}.")
                 level_up()
                 player_HP = player.max_health
-
-    player.set_health(player_HP)
 
 def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
     if player_action in ["attack", "1"]:
