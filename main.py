@@ -182,7 +182,7 @@ Bosses:
 PRO TIP: It is faster to type only the number in front of a given input (if it has one) instead of the whole word.
 ''')
 
-        player_input = input('Type "back" to go back or "quit" to quit the game. !!!choosing quit does NOT save your progress!!! -> ').lower()
+        player_input = input('Type "back" to go back or "quit" to quit the game. (choosing quit does NOT save your progress) -> ').lower()
 
         if player_input == "back":
             return True

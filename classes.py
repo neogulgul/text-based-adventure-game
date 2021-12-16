@@ -94,7 +94,7 @@ class Player:
             if player_input == "back":
                 break
 
-def see_player_inventory(self):
+    def see_player_inventory(self):
         player_inventory = []
         for item in self.inventory:
             player_inventory.append(item.name)
