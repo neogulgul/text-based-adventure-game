@@ -1,10 +1,10 @@
-import os
+from os import system
 import random
 import time
 
 
 def clear_screen():
-    os.system('cls')
+    system("cls || clear")
 
 def typing(message):
     time.sleep(0.5)

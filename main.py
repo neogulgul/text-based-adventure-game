@@ -379,8 +379,6 @@ def combat():
                     if enemy_HP <= 0:
                         battle = False
 
-    player.set_health(player_HP)
-
     if player_HP <= 0:
         helper.typing(f"{player.name} the {player.role} has been slain by a {enemy.name}.")
 
@@ -409,6 +407,8 @@ def combat():
                 helper.typing(f"You leveled up! You are now level {player.level}.")
                 level_up()
                 player_HP = player.max_health
+
+    player.set_health(player_HP)
 
 def player_attack(player_action, player_ATK, enemy_action, enemy_name, enemy_HP, enemy_DEF):
     if player_action in ["attack", "1"]:
