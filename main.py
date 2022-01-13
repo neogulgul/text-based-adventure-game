@@ -460,8 +460,8 @@ def enemy_attack(player_action, player_HP, player_DEF, enemy_action, enemy_name,
             if player_action in ["defend", "2"]:
                 success = random.randint(1, 4)
                 if success == 1:
-                    helper.typing(f"{crit}You failed in defending against the {enemy_name} attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
-                    player_HP - dmg
+                    helper.typing(f"{crit}You failed in defending against the enemy attack and took {dmg} point{helper.s_or_no_s(dmg)} of damage.")
+                    player_HP -= dmg
 
                 else: # If the player successfully defends then the enemy can not deal critical damage
                     dmg = enemy_ATK - player_DEF
