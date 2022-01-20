@@ -43,7 +43,7 @@ def character_creation():
         role = input("Which role do you want to play as? [1. Warrior / 2. Assassin / 3. Bruiser] -> ").lower()
         if role in ["warrior", "1"]:
             player_role = "Warrior"
-            player_health = 1 #10
+            player_health = 10
             player_attack = 1
             player_defence = 0
             player_speed = 10
